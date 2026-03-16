@@ -95,8 +95,8 @@ function saveSemenAnalysis() {
     const progressiveMotility = document.getElementById('semenProgMotility').value;
     const morphology = document.getElementById('semenMorphology').value;
 
-    if (!patientId || !date || !volume || !concentration || !progressiveMotility || !morphology) {
-        showToast('Lütfen zorunlu alanları doldurun', 'error');
+    if (!patientId || !date) {
+        showToast('Lütfen hasta ve tarihi seçin', 'error');
         return;
     }
 
