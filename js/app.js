@@ -71,8 +71,7 @@ function switchModule(moduleName) {
 
     // Update nav
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const navItem = document.querySelector(`.nav-item[data-module="${moduleName}"]`);
-    if (navItem) navItem.classList.add('active');
+    document.querySelectorAll(`.nav-item[data-module="${moduleName}"]`).forEach(n => n.classList.add('active'));
 
     // Update header
     const titles = {
