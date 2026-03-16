@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabSync Pro — Prof. Dr. Denizhan Özgün | Laboratuvar Yönetim Sistemi</title>
+    <meta name="description"
+        content="Profesyonel laboratuvar yönetim sistemi. Semen analizi, IVF embriyoloji, genel lab testleri ve uyuşturucu testleri.">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode_js@1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <!-- ═══ SIDEBAR ═══ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand"
+                style="flex-direction: column; align-items: flex-start; gap: 10px; padding: 28px 24px 20px;">
+                <img src="assets/biyosera_logo_hz.png" alt="Biyosera" style="height: 60px; object-fit: contain;">
+                <div class="brand-subtitle"
+                    style="font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; margin-left: 4px;">
+                    LABSYNC PRO
+                </div>
+            </div>
+
+            <div class="sidebar-doctor">
+                <div class="doctor-avatar">DÖ</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">Prof. Dr. Denizhan Özgün</div>
+                    <div class="doctor-title">Embriyolog</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Ana Menü</div>
+                <div class="nav-item active" data-module="dashboard" onclick="switchModule('dashboard')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-module="patients" onclick="switchModule('patients')">
+                    <i class="fas fa-users"></i>
+                    <span>Hastalar</span>
+                    <span class="nav-badge" id="patientCount">0</span>
+                </div>
+
+                <div class="nav-section-title">Testler</div>
+                <div class="nav-item" data-module="semen" onclick="switchModule('semen')">
+                    <i class="fas fa-vial"></i>
+                    <span>Semen Analizi</span>
+                </div>
+                <div class="nav-item" data-module="ivf" onclick="switchModule('ivf')">
+                    <i class="fas fa-baby"></i>
+                    <span>IVF / Embriyoloji</span>
+                </div>
+                <div class="nav-item" data-module="labtests" onclick="switchModule('labtests')">
+                    <i class="fas fa-flask"></i>
+                    <span>Genel Lab Testleri</span>
+                </div>
+
+                <div class="nav-item" data-module="dnatests" onclick="switchModule('dnatests')">
+                    <i class="fas fa-dna"></i>
+                    <span>DNA / Genetik</span>
+                </div>
+
+                <div class="nav-section-title">Araçlar</div>
+                <div class="nav-item" data-module="reports" onclick="switchModule('reports')">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <span>Raporlar</span>
+                </div>
+                <div class="nav-item" data-module="qrscanner" onclick="switchModule('qrscanner')">
+                    <i class="fas fa-qrcode"></i>
+                    <span>QR Tarayıcı</span>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="version">LabSync Pro v1.0.0</div>
+            </div>
+        </aside>
+
+        <!-- ═══ MAIN CONTENT ═══ -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <div class="header-title" id="pageTitle">Dashboard</div>
+                        <div class="header-breadcrumb">
+                            <span>LabSync Pro</span>
+                            <span class="separator">/</span>
+                            <span id="pageBreadcrumb">Genel Bakış</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Hasta ara (Ad, TC, ID)..." id="globalSearch"
+                            onkeyup="globalSearchHandler(event)">
+                    </div>
+                    <div class="header-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="headerDate"></span>
+                    </div>
+                    <button class="header-btn" onclick="window.open('patient-portal.html', '_blank')"
+                        title="Hasta Portalı">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                    <button class="header-btn" onclick="exportAllData()" title="Verileri Dışa Aktar">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- ═══ DASHBOARD ═══ -->
+                <section class="module-section active" id="module-dashboard">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">Toplam Hasta</div>
+                                <div class="stat-value" id="dashTotalPatients">0</div>
+                                <div class="stat-change up"><i class="fas fa-arrow-up"></i> Bu ay</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="fas fa-vial"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">Semen Analizi</div>
+                                <div class="stat-value" id="dashSemenCount">0</div>
+                                <div class="stat-change up"><i class="fas fa-arrow-up"></i> Toplam test</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fas fa-baby"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">IVF Siklusları</div>
+                                <div class="stat-value" id="dashIVFCount">0</div>
+                                <div class="stat-change up"><i class="fas fa-arrow-up"></i> Aktif</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="fas fa-flask"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">Lab Testleri</div>
+                                <div class="stat-value" id="dashLabCount">0</div>
+                                <div class="stat-change up"><i class="fas fa-arrow-up"></i> Sonuçlanan</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background:rgba(224,64,251,0.15);"><i class="fas fa-dna"
+                                    style="color:#E040FB;"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">DNA / Genetik</div>
+                                <div class="stat-value" id="dashDNACount">0</div>
+                                <div class="stat-change up"><i class="fas fa-arrow-up"></i> Genetik test</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-chart-bar"></i> Test Dağılımı</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="testDistChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-clock"></i> Son Aktiviteler</div>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentActivities">
+                                    <div class="empty-state">
+                                        <i class="fas fa-inbox"></i>
+                                        <h3>Henüz aktivite yok</h3>
+                                        <p>Test ve hasta kayıtları burada görünecek</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-chart-line"></i> Aylık Test Trendi</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="monthlyTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ PATIENTS ═══ -->
+                <section class="module-section" id="module-patients">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div style="position:relative">
+                                <i class="fas fa-search"
+                                    style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;"></i>
+                                <input type="text" class="search-input" placeholder="Hasta ara..."
+                                    id="patientSearchInput" onkeyup="filterPatients()">
+                            </div>
+                            <select class="filter-select" id="patientGenderFilter" onchange="filterPatients()">
+                                <option value="">Tüm Cinsiyet</option>
+                                <option value="Erkek">Erkek</option>
+                                <option value="Kadın">Kadın</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openPatientModal()">
+                                <i class="fas fa-user-plus"></i> Yeni Hasta
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Hasta ID</th>
+                                            <th>Ad Soyad</th>
+                                            <th>TC Kimlik</th>
+                                            <th>Doğum Tarihi</th>
+                                            <th>Cinsiyet</th>
+                                            <th>Telefon</th>
+                                            <th>Kayıt Tarihi</th>
+                                            <th>Testler</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="patientsTableBody">
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-user-slash"></i>
+                                                    <h3>Henüz hasta kaydı yok</h3>
+                                                    <p>Yeni hasta eklemek için "Yeni Hasta" butonunu kullanın</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ SEMEN ANALYSIS ═══ -->
+                <section class="module-section" id="module-semen">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <select class="filter-select" id="semenPatientFilter" onchange="filterSemenTests()">
+                                <option value="">Tüm Hastalar</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openSemenModal()">
+                                <i class="fas fa-plus-circle"></i> Yeni Semen Analizi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Test ID</th>
+                                            <th>Hasta</th>
+                                            <th>Tarih</th>
+                                            <th>Hacim (ml)</th>
+                                            <th>Konsantrasyon</th>
+                                            <th>Motilite (%)</th>
+                                            <th>Morfoloji (%)</th>
+                                            <th>Sonuç</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="semenTableBody">
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-vial"></i>
+                                                    <h3>Henüz semen analizi yok</h3>
+                                                    <p>Yeni analiz eklemek için butonu kullanın</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ IVF MODULE ═══ -->
+                <section class="module-section" id="module-ivf">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <select class="filter-select" id="ivfPatientFilter" onchange="filterIVFRecords()">
+                                <option value="">Tüm Hastalar</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openIVFModal()">
+                                <i class="fas fa-plus-circle"></i> Yeni IVF Kaydı
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Siklus ID</th>
+                                            <th>Hasta</th>
+                                            <th>Başlangıç</th>
+                                            <th>Oosit Sayısı</th>
+                                            <th>Fertilizasyon</th>
+                                            <th>Embriyo Sayısı</th>
+                                            <th>Transfer</th>
+                                            <th>Durum</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ivfTableBody">
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-baby"></i>
+                                                    <h3>Henüz IVF kaydı yok</h3>
+                                                    <p>Yeni siklus kaydı ekleyin</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ LAB TESTS ═══ -->
+                <section class="module-section" id="module-labtests">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <select class="filter-select" id="labPatientFilter" onchange="filterLabTests()">
+                                <option value="">Tüm Hastalar</option>
+                            </select>
+                            <select class="filter-select" id="labTypeFilter" onchange="filterLabTests()">
+                                <option value="">Tüm Test Tipleri</option>
+                                <option value="Hormon">Hormon Paneli</option>
+                                <option value="Hemogram">Hemogram</option>
+                                <option value="Bulaşıcı">Bulaşıcı Hastalık</option>
+                                <option value="Koagülasyon">Koagülasyon</option>
+                                <option value="Biyokimya">Biyokimya</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openLabTestModal()">
+                                <i class="fas fa-plus-circle"></i> Yeni Lab Testi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Test ID</th>
+                                            <th>Hasta</th>
+                                            <th>Test Tipi</th>
+                                            <th>Tarih</th>
+                                            <th>Parametre Sayısı</th>
+                                            <th>Bayrak</th>
+                                            <th>Durum</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="labTestsTableBody">
+                                        <tr>
+                                            <td colspan="8">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-flask"></i>
+                                                    <h3>Henüz lab testi yok</h3>
+                                                    <p>Yeni test eklemek için butonu kullanın</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+                <!-- ═══ DNA / GENETIK TESTS ═══ -->
+                <section class="module-section" id="module-dnatests">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <select class="filter-select" id="dnaPatientFilter" onchange="filterDNATests()">
+                                <option value="">Tüm Hastalar</option>
+                            </select>
+                            <select class="filter-select" id="dnaTypeFilter" onchange="filterDNATests()">
+                                <option value="">Tüm Test Tipleri</option>
+                                <option value="Karyotip">Karyotip Analizi</option>
+                                <option value="Y Mikrodelesyon">Y Mikrodelesyon</option>
+                                <option value="CFTR Mutasyon">CFTR Mutasyon</option>
+                                <option value="Sperm DFI">Sperm DNA Fragmentasyon</option>
+                                <option value="PGT-A">PGT-A (Anöploidi)</option>
+                                <option value="PGT-M">PGT-M (Monogenik)</option>
+                                <option value="PGT-SR">PGT-SR (Yapısal)</option>
+                                <option value="Babalık Testi">Babalık Testi</option>
+                                <option value="Trombofili Paneli">Trombofili Paneli</option>
+                                <option value="SMA Taşıyıcılık">SMA Taşıyıcılık</option>
+                                <option value="Genetik Check Up">Genetik Check Up</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openDNATestModal()">
+                                <i class="fas fa-plus-circle"></i> Yeni DNA Testi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Test ID</th>
+                                            <th>Hasta</th>
+                                            <th>Test Tipi</th>
+                                            <th>Tarih</th>
+                                            <th>Parametre</th>
+                                            <th>Sonuç</th>
+                                            <th>Laboratuvar</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dnaTestsTableBody">
+                                        <tr>
+                                            <td colspan="8">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-dna"></i>
+                                                    <h3>Henüz DNA / genetik testi yok</h3>
+                                                    <p>Yeni test eklemek için butonu kullanın</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ REPORTS ═══ -->
+                <section class="module-section" id="module-reports">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <select class="filter-select" id="reportPatientSelect">
+                                <option value="">Hasta Seçin</option>
+                            </select>
+                            <select class="filter-select" id="reportTypeSelect">
+                                <option value="">Rapor Tipi</option>
+                                <option value="semen">Semen Analizi</option>
+                                <option value="ivf">IVF Raporu</option>
+                                <option value="labtest">Lab Test Raporu</option>
+
+                                <option value="dnatest">DNA / Genetik Test Raporu</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="generateReport()">
+                                <i class="fas fa-file-pdf"></i> Rapor Oluştur
+                            </button>
+                            <button class="btn btn-secondary" onclick="printReport()">
+                                <i class="fas fa-print"></i> Yazdır
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card" id="reportPreviewCard">
+                        <div class="card-body">
+                            <div class="empty-state" id="reportEmptyState">
+                                <i class="fas fa-file-medical-alt"></i>
+                                <h3>Rapor Önizleme</h3>
+                                <p>Hasta ve rapor tipi seçerek rapor oluşturun</p>
+                            </div>
+                            <div id="reportContent" style="display: none;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ QR SCANNER ═══ -->
+                <section class="module-section" id="module-qrscanner">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-camera"></i> QR Kod Tarayıcı</div>
+                            </div>
+                            <div class="card-body">
+                                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">
+                                    Hasta QR kodunu tarayarak hızlıca bilgilerine erişin.
+                                </p>
+                                <div id="qr-reader-container">
+                                    <button class="btn btn-primary btn-lg" onclick="startQRScanner()"
+                                        id="startScannerBtn" style="width:100%;">
+                                        <i class="fas fa-camera"></i> Tarayıcıyı Başlat
+                                    </button>
+                                    <div id="qr-reader" style="display:none;"></div>
+                                </div>
+                                <div id="qrScanResult" style="margin-top: 16px; display: none;">
+                                    <div class="badge badge-success" style="font-size: 13px; padding: 8px 16px;">
+                                        <i class="fas fa-check-circle"></i> <span id="qrResultText"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-qrcode"></i> QR Kod Üretici</div>
+                            </div>
+                            <div class="card-body">
+                                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">
+                                    Hasta seçerek QR kod oluşturun ve yazdırın.
+                                </p>
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label class="form-label">Hasta Seçin</label>
+                                    <select class="form-control" id="qrPatientSelect" onchange="generatePatientQR()">
+                                        <option value="">-- Hasta seçin --</option>
+                                    </select>
+                                </div>
+                                <div id="qrCodeDisplay" class="qr-display" style="display:none;">
+                                    <div id="qrCodeCanvas"></div>
+                                    <button class="btn btn-secondary btn-sm" onclick="printQRCode()">
+                                        <i class="fas fa-print"></i> QR Kodu Yazdır
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- ═══ MODALS ═══ -->
+
+    <!-- Patient Modal -->
+    <div class="modal-overlay" id="patientModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-user-plus"></i> <span id="patientModalTitle">Yeni Hasta</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('patientModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="patientForm" class="form-grid">
+                    <input type="hidden" id="patientEditId">
+                    <div class="form-group">
+                        <label class="form-label">Ad <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="patientFirstName" required placeholder="Adı">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Soyad <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="patientLastName" required placeholder="Soyadı">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">TC Kimlik No <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="patientTC" required maxlength="11"
+                            placeholder="11 haneli TC">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Doğum Tarihi</label>
+                        <input type="date" class="form-control" id="patientBirthDate">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cinsiyet <span class="required">*</span></label>
+                        <select class="form-control" id="patientGender" required>
+                            <option value="">Seçin</option>
+                            <option value="Erkek">Erkek</option>
+                            <option value="Kadın">Kadın</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefon</label>
+                        <input type="tel" class="form-control" id="patientPhone" placeholder="+90 555 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" class="form-control" id="patientEmail" placeholder="ornek@mail.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kan Grubu</label>
+                        <select class="form-control" id="patientBloodType">
+                            <option value="">Seçin</option>
+                            <option>A Rh+</option>
+                            <option>A Rh-</option>
+                            <option>B Rh+</option>
+                            <option>B Rh-</option>
+                            <option>AB Rh+</option>
+                            <option>AB Rh-</option>
+                            <option>0 Rh+</option>
+                            <option>0 Rh-</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Notlar</label>
+                        <textarea class="form-control" id="patientNotes" rows="3" placeholder="Ek notlar..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('patientModal')">İptal</button>
+                <button class="btn btn-primary" onclick="savePatient()">
+                    <i class="fas fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semen Analysis Modal -->
+    <div class="modal-overlay" id="semenModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-vial"></i> Semen Analizi</div>
+                <button class="modal-close" onclick="closeModal('semenModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="semenForm" class="form-grid">
+                    <input type="hidden" id="semenEditId">
+                    <div class="form-group">
+                        <label class="form-label">Hasta <span class="required">*</span></label>
+                        <select class="form-control" id="semenPatient" required>
+                            <option value="">Hasta seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tarih <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="semenDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cinsel Perhiz (gün)</label>
+                        <input type="number" class="form-control" id="semenAbstinence" min="0" max="30"
+                            placeholder="2-7 gün">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Toplama Yöntemi</label>
+                        <select class="form-control" id="semenCollectionMethod">
+                            <option value="Mastürbasyon">Mastürbasyon</option>
+                            <option value="Koitus Interruptus">Koitus Interruptus</option>
+                            <option value="Özel Kondom">Özel Kondom</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider full-width"><span>Makroskopik İnceleme</span></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hacim (ml) <span class="required">*</span></label>
+                        <input type="number" class="form-control" id="semenVolume" step="0.1" min="0" required
+                            placeholder="WHO: ≥1.5 ml">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Renk</label>
+                        <select class="form-control" id="semenColor">
+                            <option value="Gri-opak">Gri-opak (Normal)</option>
+                            <option value="Şeffaf">Şeffaf</option>
+                            <option value="Sarı">Sarı</option>
+                            <option value="Kahverengi">Kahverengi</option>
+                            <option value="Kırmızı">Kırmızı (Hemospermi)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Likefaksiyon (dk)</label>
+                        <input type="number" class="form-control" id="semenLiquefaction" min="0" max="120"
+                            placeholder="Normal: ≤60 dk">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Viskozite</label>
+                        <select class="form-control" id="semenViscosity">
+                            <option value="Normal">Normal</option>
+                            <option value="Artmış">Artmış</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">pH</label>
+                        <input type="number" class="form-control" id="semenPH" step="0.1" min="0" max="14"
+                            placeholder="WHO: ≥7.2">
+                    </div>
+
+                    <div class="section-divider full-width"><span>Mikroskopik İnceleme</span></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Konsantrasyon (milyon/ml) <span class="required">*</span></label>
+                        <input type="number" class="form-control" id="semenConcentration" step="0.1" min="0" required
+                            placeholder="WHO: ≥15 milyon/ml">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Toplam Sperm Sayısı (milyon)</label>
+                        <input type="number" class="form-control" id="semenTotalCount" step="0.1" min="0"
+                            placeholder="WHO: ≥39 milyon">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Progresif Motilite (%) <span class="required">*</span></label>
+                        <input type="number" class="form-control" id="semenProgMotility" min="0" max="100" required
+                            placeholder="WHO: ≥32%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Non-Progresif Motilite (%)</label>
+                        <input type="number" class="form-control" id="semenNonProgMotility" min="0" max="100"
+                            placeholder="%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">İmmotil (%)</label>
+                        <input type="number" class="form-control" id="semenImmotile" min="0" max="100" placeholder="%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Toplam Motilite (%)</label>
+                        <input type="number" class="form-control" id="semenTotalMotility" min="0" max="100"
+                            placeholder="WHO: ≥40%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Normal Morfoloji - Kruger (%) <span class="required">*</span></label>
+                        <input type="number" class="form-control" id="semenMorphology" min="0" max="100" required
+                            placeholder="WHO: ≥4%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vitalite (%)</label>
+                        <input type="number" class="form-control" id="semenVitality" min="0" max="100"
+                            placeholder="WHO: ≥58%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Yuvarlak Hücre (milyon/ml)</label>
+                        <input type="number" class="form-control" id="semenRoundCells" step="0.1" min="0"
+                            placeholder="milyon/ml">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lökosit (milyon/ml)</label>
+                        <input type="number" class="form-control" id="semenWBC" step="0.1" min="0"
+                            placeholder="WHO: <1 milyon/ml">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Ek Notlar</label>
+                        <textarea class="form-control" id="semenNotes" rows="2"
+                            placeholder="Aglütinasyon, debris, vb..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('semenModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveSemenAnalysis()">
+                    <i class="fas fa-save"></i> Kaydet & Değerlendir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IVF Modal -->
+    <div class="modal-overlay" id="ivfModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-baby"></i> IVF / Embriyoloji Kaydı</div>
+                <button class="modal-close" onclick="closeModal('ivfModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="ivfForm" class="form-grid">
+                    <input type="hidden" id="ivfEditId">
+                    <div class="form-group">
+                        <label class="form-label">Hasta <span class="required">*</span></label>
+                        <select class="form-control" id="ivfPatient" required>
+                            <option value="">Hasta seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Siklus Başlangıç <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="ivfStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Protokol</label>
+                        <select class="form-control" id="ivfProtocol">
+                            <option value="Antagonist">Antagonist</option>
+                            <option value="Agonist (Uzun)">Agonist (Uzun)</option>
+                            <option value="Agonist (Kısa)">Agonist (Kısa)</option>
+                            <option value="Minimal Stimülasyon">Minimal Stimülasyon</option>
+                            <option value="Doğal Siklus">Doğal Siklus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Yöntem</label>
+                        <select class="form-control" id="ivfMethod">
+                            <option value="ICSI">ICSI</option>
+                            <option value="Klasik IVF">Klasik IVF</option>
+                            <option value="IMSI">IMSI</option>
+                            <option value="PICSI">PICSI</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider full-width"><span>Oosit & Fertilizasyon</span></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Toplanan Oosit Sayısı</label>
+                        <input type="number" class="form-control" id="ivfOocyteCount" min="0" placeholder="Toplam">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">MII (Matür) Oosit</label>
+                        <input type="number" class="form-control" id="ivfMatureOocyte" min="0"
+                            placeholder="Matür oosit">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fertilize Olan</label>
+                        <input type="number" class="form-control" id="ivfFertilized" min="0" placeholder="2PN">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fertilizasyon Oranı (%)</label>
+                        <input type="number" class="form-control" id="ivfFertRate" min="0" max="100"
+                            placeholder="Otomatik hesaplanır" readonly>
+                    </div>
+
+                    <div class="section-divider full-width"><span>Embriyo Gelişimi</span></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Day 3 Embriyo Sayısı</label>
+                        <input type="number" class="form-control" id="ivfDay3Count" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Day 3 Grade (Best)</label>
+                        <select class="form-control" id="ivfDay3Grade">
+                            <option value="">Seçin</option>
+                            <option value="Grade 1">Grade 1 (Mükemmel)</option>
+                            <option value="Grade 2">Grade 2 (İyi)</option>
+                            <option value="Grade 3">Grade 3 (Orta)</option>
+                            <option value="Grade 4">Grade 4 (Zayıf)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Blastosist Sayısı (Day 5/6)</label>
+                        <input type="number" class="form-control" id="ivfBlastCount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Blastosist Grade (Best)</label>
+                        <input type="text" class="form-control" id="ivfBlastGrade" placeholder="örn: 4AA, 3AB">
+                    </div>
+
+                    <div class="section-divider full-width"><span>Transfer & Sonuç</span></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Transfer Tarihi</label>
+                        <input type="date" class="form-control" id="ivfTransferDate">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transfer Günü</label>
+                        <select class="form-control" id="ivfTransferDay">
+                            <option value="">Seçin</option>
+                            <option value="Day 3">Day 3</option>
+                            <option value="Day 5">Day 5</option>
+                            <option value="Day 6">Day 6</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transfer Edilen Embriyo</label>
+                        <input type="number" class="form-control" id="ivfTransferCount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dondurulmuş Embriyo</label>
+                        <input type="number" class="form-control" id="ivfFrozenCount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-control" id="ivfStatus">
+                            <option value="Devam Ediyor">Devam Ediyor</option>
+                            <option value="Transfer Yapıldı">Transfer Yapıldı</option>
+                            <option value="β-hCG Pozitif">β-hCG Pozitif</option>
+                            <option value="β-hCG Negatif">β-hCG Negatif</option>
+                            <option value="Klinik Gebelik">Klinik Gebelik</option>
+                            <option value="İptal">İptal</option>
+                            <option value="Freeze All">Freeze All</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Notlar</label>
+                        <textarea class="form-control" id="ivfNotes" rows="2" placeholder="Ek notlar..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('ivfModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveIVFRecord()">
+                    <i class="fas fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lab Test Modal -->
+    <div class="modal-overlay" id="labTestModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-flask"></i> Lab Testi Girişi</div>
+                <button class="modal-close" onclick="closeModal('labTestModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="labTestForm" class="form-grid">
+                    <input type="hidden" id="labTestEditId">
+                    <div class="form-group">
+                        <label class="form-label">Hasta <span class="required">*</span></label>
+                        <select class="form-control" id="labTestPatient" required>
+                            <option value="">Hasta seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tarih <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="labTestDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Test Tipi <span class="required">*</span></label>
+                        <select class="form-control" id="labTestType" required onchange="loadLabTestParameters()">
+                            <option value="">Seçin</option>
+                            <option value="Hormon">Hormon Paneli</option>
+                            <option value="Hemogram">Hemogram</option>
+                            <option value="Bulaşıcı">Bulaşıcı Hastalık Taraması</option>
+                            <option value="Koagülasyon">Koagülasyon</option>
+                            <option value="Biyokimya">Biyokimya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select class="form-control" id="labTestStatus">
+                            <option value="Beklemede">Beklemede</option>
+                            <option value="Sonuçlandı">Sonuçlandı</option>
+                        </select>
+                    </div>
+                    <div class="full-width" id="labParametersArea" style="margin-top: 12px;">
+                        <div class="section-divider"><span>Test Parametreleri</span></div>
+                        <p style="color: var(--text-muted); font-size: 13px; text-align: center;">Test tipi seçerek
+                            parametreleri yükleyin</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('labTestModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveLabTest()">
+                    <i class="fas fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Patient Detail Modal -->
+    <div class="modal-overlay" id="patientDetailModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-user"></i> <span id="detailPatientName">Hasta Detayı</span>
+                </div>
+                <button class="modal-close" onclick="closeModal('patientDetailModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="patientDetailContent">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Semen Detail Modal -->
+    <div class="modal-overlay" id="semenDetailModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-vial"></i> Semen Analizi Detayı</div>
+                <button class="modal-close" onclick="closeModal('semenDetailModal')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="semenDetailContent">
+                <!-- Dynamically filled -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('semenDetailModal')">Kapat</button>
+                <button class="btn btn-primary" onclick="printSemenReport()" id="printSemenBtn">
+                    <i class="fas fa-print"></i> Rapor Yazdır
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DNA / Genetik Test Modal -->
+    <div class="modal-overlay" id="dnaTestModal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-dna"></i> DNA / Genetik Test</div>
+                <button class="modal-close" onclick="closeModal('dnaTestModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="dnaTestForm" class="form-grid">
+                    <input type="hidden" id="dnaTestEditId">
+                    <div class="form-group">
+                        <label class="form-label">Hasta <span class="required">*</span></label>
+                        <select class="form-control" id="dnaTestPatient" required>
+                            <option value="">Hasta seçin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tarih <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="dnaTestDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Test Tipi <span class="required">*</span></label>
+                        <select class="form-control" id="dnaTestType" required onchange="loadDNATestParameters()">
+                            <option value="">Seçiniz</option>
+                            <option value="Karyotip">Karyotip Analizi</option>
+                            <option value="Y Mikrodelesyon">Y Mikrodelesyon</option>
+                            <option value="CFTR Mutasyon">CFTR Mutasyon</option>
+                            <option value="Sperm DFI">Sperm DNA Fragmentasyon</option>
+                            <option value="PGT-A">PGT-A (Anöploidi)</option>
+                            <option value="PGT-M">PGT-M (Monogenik)</option>
+                            <option value="PGT-SR">PGT-SR (Yapısal)</option>
+                            <option value="Babalık Testi">Babalık Testi</option>
+                            <option value="Trombofili Paneli">Trombofili Paneli</option>
+                            <option value="SMA Taşıyıcılık">SMA Taşıyıcılık</option>
+                            <option value="Genetik Check Up">Genetik Check Up</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Numune Tipi</label>
+                        <select class="form-control" id="dnaTestSampleType">
+                            <option value="Kan (EDTA)">Kan (EDTA)</option>
+                            <option value="Trofektoderm Biyopsi">Trofektoderm Biyopsi</option>
+                            <option value="Blastomer Biyopsi">Blastomer Biyopsi</option>
+                            <option value="Semen">Semen</option>
+                            <option value="Bukkal Sürüntü">Bukkal Sürüntü</option>
+                            <option value="Amniyotik Sıvı">Amniyotik Sıvı</option>
+                            <option value="Koryon Villus">Koryon Villus</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Gönderildiği Laboratuvar</label>
+                        <input type="text" class="form-control" id="dnaTestLab"
+                            placeholder="örn: Intergen, Genmark, Mikrogen">
+                    </div>
+
+                    <div class="full-width" id="dnaParametersArea">
+                        <div class="section-divider"><span>Test Parametreleri</span></div>
+                        <p style="color:var(--text-muted);font-size:13px;text-align:center;">DNA test tipi seçerek
+                            parametreleri yükleyin</p>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label">Klinik Notlar</label>
+                        <textarea class="form-control" id="dnaTestNotes" rows="2"
+                            placeholder="Genetik danışman notu, aile öyküsü..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('dnaTestModal')">İptal</button>
+                <button class="btn btn-primary" onclick="saveDNATest()">
+                    <i class="fas fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Core Scripts -->
+    <script src="js/app.js?v=1.1"></script>
+    <script src="js/patients.js?v=1.1"></script>
+
+    <!-- Modüller -->
+    <script src="js/semen-analysis.js?v=1.1"></script>
+    <script src="js/ivf-module.js?v=1.1"></script>
+    <script src="js/lab-tests.js?v=1.1"></script>
+    <script src="js/dna-tests.js?v=1.1"></script>
+
+    <!-- UI/Araçlar -->
+    <script src="js/reports.js?v=1.1"></script>
+    <script src="js/qr-handler.js?v=1.1"></script>
+</body>
+
+</html>

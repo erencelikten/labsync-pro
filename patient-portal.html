@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabSync Pro — Hasta Portalı | Sonuçlarınızı Görüntüleyin</title>
+    <meta name="description" content="Lab test sonuçlarınızı QR kod veya TC kimlik numaranız ile görüntüleyin.">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Portal-specific overrides for mobile */
+        @media (max-width: 640px) {
+            .portal-results {
+                padding: 16px;
+            }
+
+            .portal-patient-info {
+                flex-direction: column;
+                text-align: center;
+                padding: 24px 16px;
+            }
+
+            .portal-patient-avatar {
+                margin: 0 auto;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            thead th {
+                font-size: 11px;
+                padding: 10px 8px;
+            }
+
+            tbody td {
+                padding: 10px 8px;
+            }
+
+            .card-header {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .card-title {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="portal-wrapper">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="portal-brand"
+                style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 28px;">
+                <img src="assets/biyosera_logo_hz.png" alt="Biyosera" style="height: 72px; object-fit: contain;">
+                <div style="text-align: center;">
+                    <div
+                        style="font-size: 14px; font-weight: 700; color: var(--text-white); letter-spacing: 2.5px; text-transform: uppercase;">
+                        LabSync Pro</div>
+                    <div
+                        style="font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px;">
+                        Hasta Portalı</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Login Screen -->
+        <div class="portal-login-container" id="portalLoginContainer">
+            <div class="portal-login-card">
+                <div
+                    style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:28px;color:var(--primary-dark);">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2>Sonuçlarınızı Görüntüleyin</h2>
+                <p>TC Kimlik numaranız ve adınız ile giriş yapın veya QR kodunuzu taratın.</p>
+
+                <div class="tabs" style="margin:0 auto 24px;justify-content:center;">
+                    <button class="tab active" onclick="switchPortalTab('manual')" id="tabManual">Manuel Giriş</button>
+                    <button class="tab" onclick="switchPortalTab('qr')" id="tabQR">QR Kod</button>
+                </div>
+
+                <!-- Manual Login -->
+                <div id="manualLoginForm">
+                    <div class="form-group" style="margin-bottom:16px;text-align:left;">
+                        <label class="form-label">TC Kimlik No</label>
+                        <input type="text" class="form-control" id="portalTC" maxlength="11"
+                            placeholder="11 haneli TC kimlik numaranız">
+                    </div>
+                    <div class="form-group" style="margin-bottom:24px;text-align:left;">
+                        <label class="form-label">Ad Soyad</label>
+                        <input type="text" class="form-control" id="portalName" placeholder="Adınız ve soyadınız">
+                    </div>
+                    <button class="btn btn-primary btn-lg" style="width:100%;" onclick="portalLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                    </button>
+                </div>
+
+                <!-- QR Login -->
+                <div id="qrLoginForm" style="display:none;">
+                    <p style="color:var(--text-secondary);font-size:13px;margin-bottom:16px;">
+                        Size verilen QR kodu kameranıza gösterin.
+                    </p>
+                    <button class="btn btn-primary btn-lg" style="width:100%;" onclick="startPortalQRScan()"
+                        id="portalScanBtn">
+                        <i class="fas fa-camera"></i> Kamerayı Aç
+                    </button>
+                    <div id="portal-qr-reader"
+                        style="display:none;margin-top:16px;border-radius:12px;overflow:hidden;border:2px solid var(--accent);">
+                    </div>
+                </div>
+
+                <div id="portalError" style="display:none;margin-top:16px;">
+                    <div class="badge badge-danger" style="font-size:13px;padding:10px 20px;">
+                        <i class="fas fa-exclamation-circle"></i> <span id="portalErrorText">Hata</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="portal-results" id="portalResultsContainer" style="display:none;">
+            <div class="portal-patient-info" id="portalPatientInfo">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div id="portalTestResults">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div style="text-align:center;margin-top:32px;">
+                <button class="btn btn-secondary" onclick="portalLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ─── Portal-specific logic ───
+        // Load data from localStorage (shared with main app)
+        function getDB() {
+            return {
+                patients: JSON.parse(localStorage.getItem('labsync_patients') || '[]'),
+                semenTests: JSON.parse(localStorage.getItem('labsync_semen') || '[]'),
+                ivfRecords: JSON.parse(localStorage.getItem('labsync_ivf') || '[]'),
+                labTests: JSON.parse(localStorage.getItem('labsync_labtests') || '[]'),
+                dnaTests: JSON.parse(localStorage.getItem('labsync_dnatests') || '[]'),
+            };
+        }
+
+        function switchPortalTab(tab) {
+            document.getElementById('tabManual').classList.toggle('active', tab === 'manual');
+            document.getElementById('tabQR').classList.toggle('active', tab === 'qr');
+            document.getElementById('manualLoginForm').style.display = tab === 'manual' ? 'block' : 'none';
+            document.getElementById('qrLoginForm').style.display = tab === 'qr' ? 'block' : 'none';
+            document.getElementById('portalError').style.display = 'none';
+        }
+
+        function portalLogin() {
+            const tc = document.getElementById('portalTC').value.trim();
+            const name = document.getElementById('portalName').value.trim().toLowerCase();
+            const db = getDB();
+
+            if (!tc || !name) {
+                showPortalError('Lütfen TC Kimlik No ve Ad Soyad alanlarını doldurun.');
+                return;
+            }
+
+            const patient = db.patients.find(p =>
+                p.tc === tc &&
+                (`${p.firstName} ${p.lastName}`).toLowerCase().includes(name)
+            );
+
+            if (patient) {
+                showPatientResults(patient);
+            } else {
+                showPortalError('Girdiğiniz bilgilerle eşleşen hasta bulunamadı. Lütfen bilgilerinizi kontrol edin.');
+            }
+        }
+
+        function showPortalError(msg) {
+            document.getElementById('portalError').style.display = 'block';
+            document.getElementById('portalErrorText').textContent = msg;
+        }
+
+        function showPatientResults(patient) {
+            const db = getDB();
+
+            document.getElementById('portalLoginContainer').style.display = 'none';
+            document.getElementById('portalResultsContainer').style.display = 'block';
+
+            const age = patient.birthDate ?
+                Math.floor((new Date() - new Date(patient.birthDate)) / (365.25 * 86400000)) : '-';
+
+            const initials = (patient.firstName[0] + patient.lastName[0]).toUpperCase();
+
+            document.getElementById('portalPatientInfo').innerHTML = `
+                <div class="portal-patient-avatar">${initials}</div>
+                <div style="flex:1;">
+                    <h2 style="font-size:22px;font-weight:700;color:var(--text-white);margin-bottom:4px;">${patient.firstName} ${patient.lastName}</h2>
+                    <div style="font-size:13px;color:var(--text-secondary);">
+                        ID: ${patient.id} | Yaş: ${age} | Cinsiyet: ${patient.gender} ${patient.bloodType ? '| Kan: ' + patient.bloodType : ''}
+                    </div>
+                </div>
+            `;
+
+            // Gather all tests
+            const semenTests = db.semenTests.filter(t => t.patientId === patient.id);
+            const ivfRecords = db.ivfRecords.filter(t => t.patientId === patient.id);
+            const labTests = db.labTests.filter(t => t.patientId === patient.id);
+            const dnaTests = db.dnaTests.filter(t => t.patientId === patient.id);
+
+            let resultsHTML = '';
+
+            if (semenTests.length + ivfRecords.length + labTests.length + dnaTests.length === 0) {
+                resultsHTML = `
+                    <div class="card" style="text-align:center;padding:60px;">
+                        <i class="fas fa-clipboard-list" style="font-size:48px;color:var(--text-muted);margin-bottom:16px;opacity:0.5;"></i>
+                        <h3 style="color:var(--text-secondary);">Henüz test sonucu bulunamadı</h3>
+                        <p style="color:var(--text-muted);font-size:14px;">Test sonuçlarınız hazır olduğunda burada görünecektir.</p>
+                    </div>
+                `;
+            } else {
+                // Semen Tests
+                if (semenTests.length > 0) {
+                    resultsHTML += `
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-vial" style="color:var(--accent);"></i> Semen Analizi Sonuçları</div>
+                            </div>
+                            <div class="card-body" style="padding:0;">
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead><tr><th>Tarih</th><th>Hacim</th><th>Konsantrasyon</th><th>Motilite</th><th>Morfoloji</th><th>Sonuç</th></tr></thead>
+                                        <tbody>
+                                            ${semenTests.map(t => `<tr>
+                                                <td>${formatDatePortal(t.date)}</td>
+                                                <td>${t.volume} ml</td>
+                                                <td>${t.concentration} M/ml</td>
+                                                <td>${t.progressiveMotility}%</td>
+                                                <td>${t.morphology}%</td>
+                                                <td><span class="result-indicator ${t.result === 'Normozoospermi' ? 'result-normal' : 'result-abnormal'}">${t.result}</span></td>
+                                            </tr>`).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Lab Tests
+                if (labTests.length > 0) {
+                    resultsHTML += labTests.map(t => `
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-flask" style="color:#2196F3;"></i> ${t.testType} — ${formatDatePortal(t.date)}</div>
+                                <span class="badge ${t.status === 'Sonuçlandı' ? 'badge-success' : 'badge-warning'}">${t.status}</span>
+                            </div>
+                            <div class="card-body" style="padding:0;">
+                                ${t.parameters && t.parameters.length > 0 ? `
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead><tr><th>Parametre</th><th>Sonuç</th><th>Birim</th><th>Referans</th><th>Durum</th></tr></thead>
+                                        <tbody>
+                                            ${t.parameters.map(p => {
+                        const flagColor = p.flag === 'Yüksek' || p.flag === 'Anormal' ? 'var(--danger)' :
+                            p.flag === 'Düşük' ? 'var(--info)' : 'var(--success)';
+                        return `<tr>
+                                                    <td style="font-weight:600;">${p.name}</td>
+                                                    <td style="font-weight:700;color:${p.flag !== 'Normal' ? flagColor : 'inherit'};">${p.value || '-'}</td>
+                                                    <td style="color:var(--text-muted);">${p.unit}</td>
+                                                    <td style="font-size:11px;color:var(--text-muted);">
+                                                        ${p.type === 'qualitative' ? 'Negatif' :
+                                (p.refMin !== undefined ? p.refMin : '') +
+                                (p.refMin !== undefined && p.refMax !== undefined ? '-' : '') +
+                                (p.refMax !== undefined ? p.refMax : '')
+                            }
+                                                    </td>
+                                                    <td style="color:${flagColor};font-weight:600;font-size:12px;">${p.flag === 'Yüksek' ? '↑' : p.flag === 'Düşük' ? '↓' : p.flag === 'Anormal' ? '⚠' : '✓'} ${p.flag}</td>
+                                                </tr>`;
+                    }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>` : '<div style="padding:24px;text-align:center;color:var(--text-muted);">Sonuçlar bekleniyor...</div>'}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // IVF Records
+                if (ivfRecords.length > 0) {
+                    resultsHTML += `
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-baby" style="color:#AB47BC;"></i> IVF Siklusları</div>
+                            </div>
+                            <div class="card-body" style="padding:0;">
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead><tr><th>Başlangıç</th><th>Protokol</th><th>Yöntem</th><th>Durum</th></tr></thead>
+                                        <tbody>
+                                            ${ivfRecords.map(r => `<tr>
+                                                <td>${formatDatePortal(r.startDate)}</td>
+                                                <td>${r.protocol}</td>
+                                                <td>${r.method}</td>
+                                                <td><span class="badge badge-info">${r.status}</span></td>
+                                            </tr>`).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // DNA Tests
+                if (dnaTests.length > 0) {
+                    resultsHTML += `
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-dna" style="color:#E040FB;"></i> DNA & Genetik Test Sonuçları</div>
+                            </div>
+                            <div class="card-body" style="padding:0;">
+                                ${dnaTests.map(t => `
+                                    <div style="border-bottom:1px solid var(--border-light);">
+                                        <div style="padding:16px 24px;background:rgba(224,64,251,0.05);display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-weight:700;color:var(--text-white);">${t.testLabel}</div>
+                                                <div style="font-size:12px;color:var(--text-muted);">${formatDatePortal(t.date)} ${t.lab ? '— ' + t.lab : ''}</div>
+                                            </div>
+                                            <span class="badge ${t.overallResult === 'Normal' ? 'badge-success' : 'badge-danger'}">${t.overallResult}</span>
+                                        </div>
+                                        <div class="table-wrapper">
+                                            <table>
+                                                <thead><tr><th>Parametre</th><th>Sonuç</th><th>Değerlendirme</th></tr></thead>
+                                                <tbody>
+                                                    ${t.parameters.map(p => {
+                        const isNormal = p.flag === 'Normal' || p.flag === 'Yok' || p.flag === 'Taşıyıcı Değil';
+                        return `<tr>
+                                                            <td style="font-weight:600;">${p.name}</td>
+                                                            <td style="font-weight:700;color:${!isNormal ? 'var(--danger)' : 'inherit'};">${p.value} ${p.unit || ''}</td>
+                                                            <td style="color:${!isNormal ? 'var(--danger)' : 'var(--success)'};font-size:12px;font-weight:600;">
+                                                                ${!isNormal ? '⚠ ' + p.flag : '✓ Normal'}
+                                                            </td>
+                                                        </tr>`;
+                    }).join('')}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        ${t.notes ? `<div style="padding:12px 24px;background:var(--bg-card);font-size:12px;color:var(--text-secondary);"><strong>Klinik Not:</strong> ${t.notes}</div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('portalTestResults').innerHTML = resultsHTML;
+        }
+
+        function portalLogout() {
+            document.getElementById('portalLoginContainer').style.display = 'flex';
+            document.getElementById('portalResultsContainer').style.display = 'none';
+            document.getElementById('portalTC').value = '';
+            document.getElementById('portalName').value = '';
+            document.getElementById('portalError').style.display = 'none';
+            history.replaceState(null, '', window.location.pathname);
+        }
+
+        function formatDatePortal(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        // ─── Auto-login from URL hash ───
+        // URL format: patient-portal.html#patient=P001
+        function checkURLLogin() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#patient=')) {
+                const id = decodeURIComponent(hash.split('=')[1]);
+                const db = getDB();
+                const patient = db.patients.find(p => p.id === id);
+                if (patient) {
+                    showPatientResults(patient);
+                }
+            }
+        }
+
+        // ─── Portal QR Scanner ───
+        let portalQrScanner = null;
+
+        function startPortalQRScan() {
+            const readerEl = document.getElementById('portal-qr-reader');
+            const scanBtn = document.getElementById('portalScanBtn');
+
+            if (typeof Html5Qrcode === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+                script.onload = () => initPortalScanner();
+                document.head.appendChild(script);
+            } else {
+                initPortalScanner();
+            }
+
+            function initPortalScanner() {
+                readerEl.style.display = 'block';
+                scanBtn.style.display = 'none';
+
+                portalQrScanner = new Html5Qrcode('portal-qr-reader');
+                portalQrScanner.start(
+                    { facingMode: 'environment' },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => {
+                        portalQrScanner.stop().then(() => {
+                            readerEl.style.display = 'none';
+                            scanBtn.style.display = 'block';
+                            portalQrScanner = null;
+
+                            // Try URL-based format first
+                            try {
+                                const url = new URL(decodedText);
+                                if (url.hash && url.hash.startsWith('#patient=')) {
+                                    const id = decodeURIComponent(url.hash.split('=')[1]);
+                                    const db = getDB();
+                                    const patient = db.patients.find(p => p.id === id);
+                                    if (patient) {
+                                        showPatientResults(patient);
+                                        return;
+                                    }
+                                }
+                            } catch (_) { }
+
+                            // Fallback: try JSON format
+                            try {
+                                const data = JSON.parse(decodedText);
+                                if (data.type === 'labsync_patient' && data.id) {
+                                    const db = getDB();
+                                    const patient = db.patients.find(p => p.id === data.id);
+                                    if (patient) {
+                                        showPatientResults(patient);
+                                    } else {
+                                        showPortalError('Bu QR koda ait hasta bulunamadı.');
+                                    }
+                                } else {
+                                    showPortalError('Geçersiz QR kod.');
+                                }
+                            } catch (e) {
+                                showPortalError('QR kod okunamadı.');
+                            }
+                        });
+                    },
+                    () => { }
+                ).catch(err => {
+                    console.error('Camera error:', err);
+                    showPortalError('Kamera erişimi sağlanamadı.');
+                    readerEl.style.display = 'none';
+                    scanBtn.style.display = 'block';
+                });
+            }
+        }
+
+        // On enter key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && document.getElementById('portalLoginContainer').style.display !== 'none') {
+                portalLogin();
+            }
+        });
+
+        // Init
+        document.addEventListener('DOMContentLoaded', checkURLLogin);
+    </script>
+</body>
+
+</html>
