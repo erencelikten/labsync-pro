@@ -112,6 +112,8 @@ function deletePatient(id) {
 
     addActivity(`Hasta silindi: ${p.firstName} ${p.lastName}`, 'fas fa-user-minus', 'warning');
     saveDB();
+    if (window.deleteFromSupabase) window.deleteFromSupabase('patients', id);
+
     refreshPatientsTable();
     populatePatientSelects();
     refreshDashboard();

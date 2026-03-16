@@ -19,6 +19,11 @@ function saveDB() {
     localStorage.setItem('labsync_labtests', JSON.stringify(DB.labTests));
     localStorage.setItem('labsync_dnatests', JSON.stringify(DB.dnaTests));
     localStorage.setItem('labsync_activities', JSON.stringify(DB.activities));
+
+    // Trigger Supabase Sync
+    if (window.syncToSupabase) {
+        window.syncToSupabase();
+    }
 }
 
 function addActivity(text, icon = 'fas fa-circle', type = 'info') {
@@ -414,7 +419,23 @@ function updateHeaderDate() {
 }
 
 // ─── Init ───
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Try to load from Supabase if available
+    if (window.loadFromSupabase) {
+        document.getElementById('pageTitle').textContent = 'Veriler Senkronize Ediliyor...';
+        const cloudDB = await window.loadFromSupabase();
+        if (cloudDB) {
+            // Auto-migration: if cloud is empty but local has data, upload local to cloud!
+            if (cloudDB.patients.length === 0 && DB.patients.length > 0) {
+                console.log('Bulut veritabanı boş, yerel veriler buluta aktarılıyor (Migration)...');
+                await window.syncToSupabase();
+            } else {
+                // Otherwise override local memory with cloud truth
+                Object.assign(DB, cloudDB);
+            }
+        }
+    }
+
     updateHeaderDate();
     refreshDashboard();
     populatePatientSelects();

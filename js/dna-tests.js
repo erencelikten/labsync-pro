@@ -288,6 +288,7 @@ function deleteDNATest(id) {
     if (!confirm('Bu DNA testini silmek istediğinize emin misiniz?')) return;
     DB.dnaTests = DB.dnaTests.filter(x => x.id !== id);
     saveDB();
+    if (window.deleteFromSupabase) window.deleteFromSupabase('dna_tests', id);
     refreshDNATestsTable();
     refreshDashboard();
     showToast('DNA testi silindi', 'warning');

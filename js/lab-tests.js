@@ -213,6 +213,7 @@ function deleteLabTest(id) {
     if (!confirm('Bu lab testini silmek istediğinize emin misiniz?')) return;
     DB.labTests = DB.labTests.filter(x => x.id !== id);
     saveDB();
+    if (window.deleteFromSupabase) window.deleteFromSupabase('lab_tests', id);
     refreshLabTestsTable();
     refreshDashboard();
     showToast('Lab testi silindi', 'warning');

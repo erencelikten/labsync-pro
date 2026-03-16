@@ -140,10 +140,16 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
     <script>
         // ─── Portal-specific logic ───
-        // Load data from localStorage (shared with main app)
-        function getDB() {
+        // Load data from memory/Supabase (shared fallback)
+        async function getDB() {
+            if (window.loadFromSupabase) {
+                const cloudDB = await window.loadFromSupabase();
+                if (cloudDB) return cloudDB;
+            }
             return {
                 patients: JSON.parse(localStorage.getItem('labsync_patients') || '[]'),
                 semenTests: JSON.parse(localStorage.getItem('labsync_semen') || '[]'),
@@ -161,10 +167,10 @@
             document.getElementById('portalError').style.display = 'none';
         }
 
-        function portalLogin() {
+        async function portalLogin() {
             const tc = document.getElementById('portalTC').value.trim();
             const name = document.getElementById('portalName').value.trim().toLowerCase();
-            const db = getDB();
+            const db = await getDB();
 
             if (!tc || !name) {
                 showPortalError('Lütfen TC Kimlik No ve Ad Soyad alanlarını doldurun.');
@@ -188,8 +194,8 @@
             document.getElementById('portalErrorText').textContent = msg;
         }
 
-        function showPatientResults(patient) {
-            const db = getDB();
+        async function showPatientResults(patient) {
+            const db = await getDB();
 
             document.getElementById('portalLoginContainer').style.display = 'none';
             document.getElementById('portalResultsContainer').style.display = 'block';
@@ -382,14 +388,16 @@
 
         // ─── Auto-login from URL hash ───
         // URL format: patient-portal.html#patient=P001
-        function checkURLLogin() {
+        async function checkURLLogin() {
             const hash = window.location.hash;
             if (hash && hash.startsWith('#patient=')) {
                 const id = decodeURIComponent(hash.split('=')[1]);
-                const db = getDB();
+                const db = await getDB();
                 const patient = db.patients.find(p => p.id === id);
                 if (patient) {
                     showPatientResults(patient);
+                } else {
+                    showPortalError('Bu QR koda ait hasta bulunamadı.');
                 }
             }
         }
@@ -418,8 +426,8 @@
                 portalQrScanner.start(
                     { facingMode: 'environment' },
                     { fps: 10, qrbox: { width: 250, height: 250 } },
-                    (decodedText) => {
-                        portalQrScanner.stop().then(() => {
+                    async (decodedText) => {
+                        portalQrScanner.stop().then(async () => {
                             readerEl.style.display = 'none';
                             scanBtn.style.display = 'block';
                             portalQrScanner = null;
@@ -429,7 +437,7 @@
                                 const url = new URL(decodedText);
                                 if (url.hash && url.hash.startsWith('#patient=')) {
                                     const id = decodeURIComponent(url.hash.split('=')[1]);
-                                    const db = getDB();
+                                    const db = await getDB();
                                     const patient = db.patients.find(p => p.id === id);
                                     if (patient) {
                                         showPatientResults(patient);
@@ -442,7 +450,7 @@
                             try {
                                 const data = JSON.parse(decodedText);
                                 if (data.type === 'labsync_patient' && data.id) {
-                                    const db = getDB();
+                                    const db = await getDB();
                                     const patient = db.patients.find(p => p.id === data.id);
                                     if (patient) {
                                         showPatientResults(patient);

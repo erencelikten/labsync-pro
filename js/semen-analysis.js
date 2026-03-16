@@ -152,6 +152,7 @@ function deleteSemenTest(id) {
     if (!confirm('Bu semen analizi kaydını silmek istediğinize emin misiniz?')) return;
     DB.semenTests = DB.semenTests.filter(x => x.id !== id);
     saveDB();
+    if (window.deleteFromSupabase) window.deleteFromSupabase('semen_tests', id);
     refreshSemenTable();
     refreshDashboard();
     showToast('Semen analizi silindi', 'warning');

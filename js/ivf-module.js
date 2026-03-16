@@ -91,6 +91,7 @@ function deleteIVFRecord(id) {
     if (!confirm('Bu IVF kaydını silmek istediğinize emin misiniz?')) return;
     DB.ivfRecords = DB.ivfRecords.filter(x => x.id !== id);
     saveDB();
+    if (window.deleteFromSupabase) window.deleteFromSupabase('ivf_records', id);
     refreshIVFTable();
     refreshDashboard();
     showToast('IVF kaydı silindi', 'warning');
