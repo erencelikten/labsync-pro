@@ -200,14 +200,34 @@ function formatDateTime(dateStr) {
 
 // ─── Dashboard ───
 function refreshDashboard() {
-    document.getElementById('dashTotalPatients').textContent = DB.patients.length;
+    const totalPatients = DB.patients.length;
+    let totalTests = DB.semenTests.length + DB.ivfRecords.length + DB.labTests.length + (DB.dnaTests ? DB.dnaTests.length : 0);
+
+    document.getElementById('dashTotalPatients').textContent = totalPatients;
     document.getElementById('dashSemenCount').textContent = DB.semenTests.length;
     document.getElementById('dashIVFCount').textContent = DB.ivfRecords.length;
     document.getElementById('dashLabCount').textContent = DB.labTests.length;
     if (document.getElementById('dashDNACount')) {
         document.getElementById('dashDNACount').textContent = DB.dnaTests.length;
     }
-    document.getElementById('patientCount').textContent = DB.patients.length;
+    
+    // New Hero Stats
+    if (document.getElementById('dashHeroPatients')) {
+        document.getElementById('dashHeroPatients').textContent = totalPatients;
+    }
+    if (document.getElementById('dashHeroTests')) {
+        document.getElementById('dashHeroTests').textContent = totalTests;
+    }
+    
+    // Status Widget
+    if (document.getElementById('statusPending')) {
+        document.getElementById('statusPending').textContent = Math.floor(Math.random() * 10) + 2; // Demo Data
+    }
+    if (document.getElementById('statusApproved')) {
+        document.getElementById('statusApproved').textContent = Math.floor(Math.random() * 50) + 10; // Demo Data
+    }
+
+    document.getElementById('patientCount').textContent = totalPatients;
 
     renderRecentActivities();
     renderTestDistChart();
@@ -226,18 +246,17 @@ function renderRecentActivities() {
         return;
     }
 
-    const recent = DB.activities.slice(0, 8);
-    container.innerHTML = recent.map(a => `
-        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light);">
-            <div style="width:32px;height:32px;border-radius:50%;background:var(--${a.type === 'success' ? 'success' : a.type === 'warning' ? 'warning' : 'info'}-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <i class="${a.icon}" style="font-size:12px;color:var(--${a.type === 'success' ? 'success' : a.type === 'warning' ? 'warning' : 'info'});"></i>
-            </div>
-            <div style="flex:1;">
-                <div style="font-size:13px;color:var(--text-primary);">${a.text}</div>
-                <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${formatDateTime(a.time)}</div>
+    const recent = DB.activities.slice(0, 6); // Limit to 6 for timeline
+    container.innerHTML = recent.map(a => {
+        return `
+        <div class="timeline-item ${a.type}">
+            <div class="timeline-content">
+                <div class="timeline-time"><i class="far fa-clock"></i> ${formatDateTime(a.time)}</div>
+                <div class="timeline-text"><i class="${a.icon}" style="margin-right: 6px; color: var(--${a.type});"></i>${a.text}</div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 let testDistChartInstance = null;
@@ -260,7 +279,7 @@ function renderTestDistChart() {
                     DB.labTests.length || 0,
                     DB.dnaTests.length || 0,
                 ],
-                backgroundColor: ['#00D4AA', '#AB47BC', '#2196F3', '#E040FB'],
+                backgroundColor: ['#A855F7', '#6366F1', '#3B82F6', '#C084FC'],
                 borderWidth: 0,
                 borderRadius: 4,
                 spacing: 4,
@@ -274,7 +293,7 @@ function renderTestDistChart() {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        color: '#8DA4BF',
+                        color: '#94A3B8',
                         usePointStyle: true,
                         padding: 20,
                         font: { family: 'Inter', size: 12 }
@@ -315,22 +334,22 @@ function renderMonthlyTrendChart() {
                 {
                     label: 'Semen Analizi',
                     data: semenByMonth,
-                    borderColor: '#00D4AA',
-                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    borderColor: '#A855F7',
+                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 4,
-                    pointBackgroundColor: '#00D4AA',
+                    pointBackgroundColor: '#A855F7',
                 },
                 {
                     label: 'Lab Testleri',
                     data: labByMonth,
-                    borderColor: '#2196F3',
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderColor: '#6366F1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 4,
-                    pointBackgroundColor: '#2196F3',
+                    pointBackgroundColor: '#6366F1',
                 },
             ]
         },
@@ -339,19 +358,19 @@ function renderMonthlyTrendChart() {
             maintainAspectRatio: false,
             scales: {
                 x: {
-                    grid: { color: 'rgba(32, 82, 149, 0.1)' },
-                    ticks: { color: '#8DA4BF', font: { family: 'Inter', size: 11 } }
+                    grid: { color: 'rgba(99, 102, 241, 0.08)' },
+                    ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 } }
                 },
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(32, 82, 149, 0.1)' },
-                    ticks: { color: '#8DA4BF', font: { family: 'Inter', size: 11 }, stepSize: 1 }
+                    grid: { color: 'rgba(99, 102, 241, 0.08)' },
+                    ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 }, stepSize: 1 }
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: '#8DA4BF',
+                        color: '#94A3B8',
                         usePointStyle: true,
                         font: { family: 'Inter', size: 12 }
                     }
@@ -486,6 +505,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         volEl.addEventListener('input', calcTotal);
         concEl.addEventListener('input', calcTotal);
+    }
+
+    // ─── Header Auto-Hide on Scroll ───
+    const pageContent = document.querySelector('.page-content');
+    const topHeader = document.querySelector('.top-header');
+    if (pageContent && topHeader) {
+        let lastScrollTop = 0;
+        pageContent.addEventListener('scroll', () => {
+            const st = pageContent.scrollTop;
+            if (st > 60) {
+                topHeader.classList.add('header-hidden');
+            } else {
+                topHeader.classList.remove('header-hidden');
+            }
+            lastScrollTop = st;
+        }, { passive: true });
     }
 
     console.log('LabSync Pro initialized.');

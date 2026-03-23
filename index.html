@@ -123,7 +123,30 @@
             <div class="page-content">
                 <!-- ═══ DASHBOARD ═══ -->
                 <section class="module-section active" id="module-dashboard">
-                    <div class="stats-row">
+                    <!-- Dashboard Hero -->
+                    <div class="dashboard-hero card">
+                        <div class="hero-content">
+                            <h2 id="dashGreeting">Hoş Geldiniz, Dr. Denizhan</h2>
+                            <p>Bugün sistemde toplam <strong id="dashHeroPatients">0</strong> hasta ve <strong id="dashHeroTests">0</strong> test işlemi kayıtlı.</p>
+                        </div>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" onclick="switchModule('patients'); setTimeout(()=>openModal('patientModal'),300)">
+                                <i class="fas fa-plus"></i> Yeni Hasta Kaydı
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.open('patient-portal.html', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Portal'a Git
+                            </button>
+                        </div>
+                        <!-- Wave decoration inside hero -->
+                        <div class="dashboard-wave" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; margin: 0;">
+                            <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+                                <path class="wave-1" d="M0,40 C320,80 640,0 960,40 C1120,60 1280,20 1440,40 L1440,80 L0,80 Z"></path>
+                                <path class="wave-2" d="M0,50 C360,10 720,70 1080,30 C1200,20 1360,50 1440,40 L1440,80 L0,80 Z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="stats-row" style="margin-top: 24px;">
                         <div class="stat-card">
                             <div class="stat-icon blue"><i class="fas fa-users"></i></div>
                             <div class="stat-info">
@@ -157,8 +180,7 @@
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon" style="background:rgba(224,64,251,0.15);"><i class="fas fa-dna"
-                                    style="color:#E040FB;"></i></div>
+                            <div class="stat-icon purple"><i class="fas fa-dna"></i></div>
                             <div class="stat-info">
                                 <div class="stat-label">DNA / Genetik</div>
                                 <div class="stat-value" id="dashDNACount">0</div>
@@ -167,23 +189,37 @@
                         </div>
                     </div>
 
-                    <div class="grid-2">
-                        <div class="card">
+                    <div class="dashboard-grid" style="margin-top: 24px;">
+                        <div class="card chart-card">
                             <div class="card-header">
-                                <div class="card-title"><i class="fas fa-chart-bar"></i> Test Dağılımı</div>
+                                <div class="card-title"><i class="fas fa-chart-pie"></i> Test Dağılımı</div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-container">
+                                <div class="chart-container" style="height: 250px;">
                                     <canvas id="testDistChart"></canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
+
+                        <div class="card trend-card">
                             <div class="card-header">
-                                <div class="card-title"><i class="fas fa-clock"></i> Son Aktiviteler</div>
+                                <div class="card-title"><i class="fas fa-chart-line"></i> Aylık Test Trendi</div>
                             </div>
                             <div class="card-body">
-                                <div id="recentActivities">
+                                <div class="chart-container" style="height: 250px;">
+                                    <canvas id="monthlyTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid-secondary">
+                        <div class="card log-card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-history"></i> Sistem Logları & Aktiviteler</div>
+                            </div>
+                            <div class="card-body" style="height: 320px; overflow-y: auto;">
+                                <div id="recentActivities" class="timeline">
                                     <div class="empty-state">
                                         <i class="fas fa-inbox"></i>
                                         <h3>Henüz aktivite yok</h3>
@@ -192,15 +228,37 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="card" style="margin-top: 20px;">
-                        <div class="card-header">
-                            <div class="card-title"><i class="fas fa-chart-line"></i> Aylık Test Trendi</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="monthlyTrendChart"></canvas>
+                        <div class="card status-card">
+                            <div class="card-header">
+                                <div class="card-title"><i class="fas fa-bell"></i> Hızlı Durum Özeti</div>
+                            </div>
+                            <div class="card-body" style="padding: 0;">
+                                <div class="status-list" id="dashStatusList">
+                                    <div class="status-item">
+                                        <div class="status-icon" style="color: var(--warning); background: var(--warning-bg);"><i class="fas fa-clock"></i></div>
+                                        <div class="status-details">
+                                            <h4>Bekleyen Testler</h4>
+                                            <p>İşlem bekleyen kayıtlar</p>
+                                        </div>
+                                        <div class="status-value" id="statusPending">0</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-icon" style="color: var(--success); background: var(--success-bg);"><i class="fas fa-check-circle"></i></div>
+                                        <div class="status-details">
+                                            <h4>Onaylanan Sonuçlar</h4>
+                                            <p>Bu ay tamamlananlar</p>
+                                        </div>
+                                        <div class="status-value" id="statusApproved">0</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-icon" style="color: var(--info); background: var(--info-bg);"><i class="fas fa-desktop"></i></div>
+                                        <div class="status-details">
+                                            <h4>Sistem Durumu</h4>
+                                            <p>Supabase Bağlantısı</p>
+                                        </div>
+                                        <div class="status-value" style="color: var(--success); font-size: 13px;"><i class="fas fa-wifi"></i> Online</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -586,16 +644,16 @@
                 <form id="patientForm" class="form-grid">
                     <input type="hidden" id="patientEditId">
                     <div class="form-group">
-                        <label class="form-label">Ad <span class="required">*</span></label>
-                        <input type="text" class="form-control" id="patientFirstName" required placeholder="Adı">
+                        <label class="form-label">Ad</label>
+                        <input type="text" class="form-control" id="patientFirstName" placeholder="Adı">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Soyad <span class="required">*</span></label>
-                        <input type="text" class="form-control" id="patientLastName" required placeholder="Soyadı">
+                        <label class="form-label">Soyad</label>
+                        <input type="text" class="form-control" id="patientLastName" placeholder="Soyadı">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">TC Kimlik No <span class="required">*</span></label>
-                        <input type="text" class="form-control" id="patientTC" required maxlength="11"
+                        <label class="form-label">TC Kimlik No</label>
+                        <input type="text" class="form-control" id="patientTC" maxlength="11"
                             placeholder="11 haneli TC">
                     </div>
                     <div class="form-group">
@@ -603,8 +661,8 @@
                         <input type="date" class="form-control" id="patientBirthDate">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Cinsiyet <span class="required">*</span></label>
-                        <select class="form-control" id="patientGender" required>
+                        <label class="form-label">Cinsiyet</label>
+                        <select class="form-control" id="patientGender">
                             <option value="">Seçin</option>
                             <option value="Erkek">Erkek</option>
                             <option value="Kadın">Kadın</option>

@@ -253,17 +253,20 @@ function printReport() {
         <head>
             <title>LabSync Pro — Rapor</title>
             <style>
-                body { font-family: 'Inter', Arial, sans-serif; margin: 0; padding: 20px; }
-                .report-preview { max-width: 210mm; margin: 0 auto; }
+                @page { size: A4; margin: 15mm; }
+                * { box-sizing: border-box; }
+                body { font-family: 'Inter', Arial, sans-serif; margin: 0; padding: 0; color: #1a1a1a; }
+                .report-preview { max-width: 100%; margin: 0; padding: 0; font-size: 12px; line-height: 1.6; }
                 .report-header-band { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0A2647; padding-bottom: 16px; margin-bottom: 24px; }
                 .report-logo-area h1 { color: #0A2647; font-size: 22px; font-weight: 800; margin: 0; }
                 .report-logo-area p { color: #555; font-size: 11px; margin: 4px 0 0; }
-                .report-patient-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-radius: 8px; }
+                .report-patient-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; }
                 .info-item { font-size: 11px; }
                 .info-label { font-weight: 700; color: #0A2647; }
-                .report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                .report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: auto; }
                 .report-table th { background: #0A2647; color: white; padding: 8px 12px; font-size: 11px; text-align: left; }
                 .report-table td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; font-size: 11px; }
+                .report-table tr { page-break-inside: avoid; }
                 .report-table tr:nth-child(even) td { background: #f8f9fa; }
                 .flag-high { color: #FF4757; font-weight: 700; }
                 .flag-low { color: #2196F3; font-weight: 700; }
@@ -272,7 +275,10 @@ function printReport() {
                 .report-signature .line { width: 180px; border-top: 1px solid #333; margin-bottom: 4px; }
                 .report-signature .name { font-weight: 700; color: #0A2647; font-size: 12px; }
                 .report-signature .title-text { font-size: 10px; color: #666; }
-                @media print { body { padding: 0; } }
+                @media print {
+                    body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                    .report-preview { box-shadow: none; }
+                }
             </style>
         </head>
         <body>
