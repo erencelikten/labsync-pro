@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index-v2.html" },
+    { "source": "/index.html", "destination": "/index-v2.html" },
+    { "source": "/patient-portal.html", "destination": "/patient-portal-v2.html" },
+    { "source": "/portal", "destination": "/patient-portal-v2.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    }
+  ]
+}
