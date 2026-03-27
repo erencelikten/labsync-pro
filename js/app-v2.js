@@ -292,12 +292,14 @@ function formatDateTime(dateStr) {
 }
 
 // ═══════════════════════════════════════════════════
-// PARTICLE SYSTEM
+// PARTICLE SYSTEM + FLOATING SPERM CELLS
 // ═══════════════════════════════════════════════════
 function initParticles() {
     const container = document.getElementById('particlesContainer');
     if (!container) return;
-    const count = window.innerWidth < 768 ? 15 : 35;
+
+    // Regular particles
+    const count = window.innerWidth < 768 ? 10 : 25;
     for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
@@ -310,6 +312,46 @@ function initParticles() {
         p.style.background = colors[Math.floor(Math.random() * colors.length)];
         p.style.boxShadow = `0 0 ${4 + Math.random() * 6}px ${p.style.background}`;
         container.appendChild(p);
+    }
+
+    // Floating sperm cells
+    const spermCount = window.innerWidth < 768 ? 6 : 14;
+    const spermColors = [
+        'rgba(0, 212, 255, 0.4)',   // cyan
+        'rgba(168, 85, 247, 0.35)', // purple
+        'rgba(0, 255, 136, 0.3)',   // green
+        'rgba(0, 229, 255, 0.35)',  // light cyan
+        'rgba(99, 102, 241, 0.3)',  // indigo
+    ];
+    const sizes = ['sperm-small', 'sperm-med', 'sperm-large'];
+    const anims = ['spermSwim', 'spermSwim2', 'spermSwim3'];
+
+    for (let i = 0; i < spermCount; i++) {
+        const sperm = document.createElement('div');
+        const size = sizes[Math.floor(Math.random() * sizes.length)];
+        const color = spermColors[Math.floor(Math.random() * spermColors.length)];
+        const anim = anims[Math.floor(Math.random() * anims.length)];
+
+        sperm.className = `sperm-cell ${size}`;
+        sperm.innerHTML = `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="22" r="10" fill="${color}" />
+            <circle cx="18" cy="22" r="6" fill="${color.replace(/[\d.]+\)$/, '0.6)')}" />
+            <path d="M28 22 C32 18, 36 26, 40 20 C44 14, 48 28, 52 22 C56 16, 58 24, 58 24" 
+                  stroke="${color}" stroke-width="2.5" stroke-linecap="round" fill="none">
+                <animate attributeName="d" 
+                    values="M28 22 C32 18, 36 26, 40 20 C44 14, 48 28, 52 22 C56 16, 58 24, 58 24;
+                            M28 22 C32 26, 36 18, 40 24 C44 28, 48 16, 52 22 C56 28, 58 20, 58 20;
+                            M28 22 C32 18, 36 26, 40 20 C44 14, 48 28, 52 22 C56 16, 58 24, 58 24"
+                    dur="${1.5 + Math.random() * 1.5}s" repeatCount="indefinite" />
+            </path>
+        </svg>`;
+
+        sperm.style.left = Math.random() * 90 + 5 + '%';
+        sperm.style.animationName = anim;
+        sperm.style.animationDuration = (18 + Math.random() * 25) + 's';
+        sperm.style.animationDelay = Math.random() * 15 + 's';
+
+        container.appendChild(sperm);
     }
 }
 
