@@ -9,10 +9,10 @@
     --bg-deep: #060a14;
     --bg-primary: #0a0e1a;
     --bg-secondary: #0f1628;
-    --bg-card: rgba(15, 22, 40, 0.35);
-    --bg-card-hover: rgba(20, 30, 55, 0.45);
-    --bg-glass: rgba(10, 14, 26, 0.3);
-    --bg-input: rgba(15, 22, 40, 0.4);
+    --bg-card: rgba(15, 22, 40, 0.25);
+    --bg-card-hover: rgba(20, 30, 55, 0.35);
+    --bg-glass: rgba(10, 14, 26, 0.2);
+    --bg-input: rgba(15, 22, 40, 0.35);
     --border-glass: rgba(0, 212, 255, 0.12);
     --border-glow: rgba(0, 212, 255, 0.3);
     --border-subtle: rgba(255, 255, 255, 0.06);
@@ -128,64 +128,79 @@ body::after {
     position: absolute;
     pointer-events: none;
     opacity: 0;
-    animation: spermSwim linear infinite;
     filter: blur(0.5px);
 }
 .sperm-cell svg {
     width: 100%;
     height: 100%;
 }
-.sperm-cell.sperm-small { width: 30px; height: 30px; }
-.sperm-cell.sperm-med { width: 45px; height: 45px; }
-.sperm-cell.sperm-large { width: 60px; height: 60px; }
 
-@keyframes spermSwim {
-    0% {
-        opacity: 0;
-        transform: translateY(105vh) rotate(0deg) translateX(0);
-    }
-    5% { opacity: 0.12; }
-    25% { transform: translateY(75vh) rotate(15deg) translateX(30px); }
-    50% { transform: translateY(50vh) rotate(-10deg) translateX(-20px); }
-    75% { transform: translateY(25vh) rotate(20deg) translateX(25px); }
-    95% { opacity: 0.12; }
-    100% {
-        opacity: 0;
-        transform: translateY(-10vh) rotate(-5deg) translateX(-10px);
-    }
+/* Near layer: bigger, more visible */
+.sperm-cell.sperm-near {
+    width: 55px; height: 55px;
+    filter: blur(0px);
+}
+/* Mid layer */
+.sperm-cell.sperm-mid {
+    width: 38px; height: 38px;
+    filter: blur(0.5px);
+}
+/* Far layer: smallest, blurry */
+.sperm-cell.sperm-far {
+    width: 22px; height: 22px;
+    filter: blur(1.5px);
 }
 
-/* Sperm swim wiggle variant */
-@keyframes spermSwim2 {
-    0% {
-        opacity: 0;
-        transform: translateY(105vh) rotate(10deg) translateX(0);
-    }
-    5% { opacity: 0.1; }
-    20% { transform: translateY(80vh) rotate(-20deg) translateX(-40px); }
-    40% { transform: translateY(60vh) rotate(15deg) translateX(30px); }
-    60% { transform: translateY(40vh) rotate(-15deg) translateX(-25px); }
-    80% { transform: translateY(20vh) rotate(10deg) translateX(20px); }
-    95% { opacity: 0.1; }
-    100% {
-        opacity: 0;
-        transform: translateY(-10vh) rotate(-10deg) translateX(-15px);
-    }
+/* Swim RIGHT */
+@keyframes spermSwimRight {
+    0%   { opacity: 0; transform: translateX(-15vw) translateY(0) rotate(0deg); }
+    5%   { opacity: var(--sperm-opacity, 0.12); }
+    15%  { transform: translateX(5vw)   translateY(-12px) rotate(-4deg); }
+    30%  { transform: translateX(20vw)  translateY(10px)  rotate(5deg); }
+    45%  { transform: translateX(40vw)  translateY(-8px)  rotate(-3deg); }
+    60%  { transform: translateX(60vw)  translateY(14px)  rotate(4deg); }
+    75%  { transform: translateX(80vw)  translateY(-6px)  rotate(-2deg); }
+    90%  { transform: translateX(95vw)  translateY(8px)   rotate(3deg); }
+    95%  { opacity: var(--sperm-opacity, 0.12); }
+    100% { opacity: 0; transform: translateX(110vw) translateY(0) rotate(0deg); }
 }
 
-@keyframes spermSwim3 {
-    0% {
-        opacity: 0;
-        transform: translateY(105vh) rotate(-5deg) translateX(0);
-    }
-    5% { opacity: 0.08; }
-    30% { transform: translateY(70vh) rotate(25deg) translateX(50px); }
-    60% { transform: translateY(35vh) rotate(-20deg) translateX(-35px); }
-    95% { opacity: 0.08; }
-    100% {
-        opacity: 0;
-        transform: translateY(-10vh) rotate(5deg) translateX(15px);
-    }
+/* Swim LEFT */
+@keyframes spermSwimLeft {
+    0%   { opacity: 0; transform: translateX(110vw) translateY(0) rotate(180deg); }
+    5%   { opacity: var(--sperm-opacity, 0.12); }
+    15%  { transform: translateX(90vw)  translateY(10px)  rotate(184deg); }
+    30%  { transform: translateX(70vw)  translateY(-12px) rotate(176deg); }
+    45%  { transform: translateX(50vw)  translateY(8px)   rotate(183deg); }
+    60%  { transform: translateX(30vw)  translateY(-10px) rotate(177deg); }
+    75%  { transform: translateX(15vw)  translateY(6px)   rotate(182deg); }
+    90%  { transform: translateX(2vw)   translateY(-8px)  rotate(178deg); }
+    95%  { opacity: var(--sperm-opacity, 0.12); }
+    100% { opacity: 0; transform: translateX(-15vw) translateY(0) rotate(180deg); }
+}
+
+/* Swim RIGHT with more wave */
+@keyframes spermSwimRight2 {
+    0%   { opacity: 0; transform: translateX(-15vw) translateY(0) rotate(0deg); }
+    5%   { opacity: var(--sperm-opacity, 0.10); }
+    20%  { transform: translateX(10vw)  translateY(-18px) rotate(-6deg); }
+    40%  { transform: translateX(35vw)  translateY(16px)  rotate(6deg); }
+    60%  { transform: translateX(60vw)  translateY(-14px) rotate(-5deg); }
+    80%  { transform: translateX(85vw)  translateY(12px)  rotate(4deg); }
+    95%  { opacity: var(--sperm-opacity, 0.10); }
+    100% { opacity: 0; transform: translateX(110vw) translateY(0) rotate(0deg); }
+}
+
+/* Swim LEFT with more wave */
+@keyframes spermSwimLeft2 {
+    0%   { opacity: 0; transform: translateX(110vw) translateY(0) rotate(180deg); }
+    5%   { opacity: var(--sperm-opacity, 0.10); }
+    20%  { transform: translateX(85vw)  translateY(16px)  rotate(186deg); }
+    40%  { transform: translateX(55vw)  translateY(-14px) rotate(174deg); }
+    60%  { transform: translateX(30vw)  translateY(12px)  rotate(185deg); }
+    80%  { transform: translateX(8vw)   translateY(-10px) rotate(176deg); }
+    95%  { opacity: var(--sperm-opacity, 0.10); }
+    100% { opacity: 0; transform: translateX(-15vw) translateY(0) rotate(180deg); }
 }
 
 /* ─── App Layout ─── */
@@ -200,8 +215,9 @@ body::after {
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
-    background: rgba(8, 12, 24, 0.85);
-    backdrop-filter: blur(24px);
+    background: rgba(8, 12, 24, 0.45);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border-right: 1px solid var(--border-glass);
     display: flex;
     flex-direction: column;
@@ -364,8 +380,9 @@ body::after {
 /* ─── Top Header ─── */
 .top-header {
     height: var(--header-height);
-    background: rgba(8, 12, 24, 0.7);
-    backdrop-filter: blur(20px);
+    background: rgba(8, 12, 24, 0.35);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border-bottom: 1px solid var(--border-glass);
     display: flex;
     align-items: center;
@@ -487,13 +504,15 @@ body::after {
 
 /* ─── Cards ─── */
 .card {
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass);
+    background: rgba(15, 22, 40, 0.25);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: all var(--transition-med);
     position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .card::before {
     content: '';
@@ -501,13 +520,13 @@ body::after {
     inset: 0;
     border-radius: var(--radius-lg);
     padding: 1px;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), transparent 40%, transparent 60%, rgba(168, 85, 247, 0.05));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 40%, transparent 60%, rgba(255, 255, 255, 0.04));
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     -webkit-mask-composite: xor;
     pointer-events: none;
 }
-.card:hover { border-color: rgba(0, 212, 255, 0.2); }
+.card:hover { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
 .card-header {
     padding: 16px 20px;
     border-bottom: 1px solid var(--border-subtle);
@@ -533,9 +552,10 @@ body::after {
     gap: 16px;
 }
 .stat-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass);
+    background: rgba(15, 22, 40, 0.2);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 20px;
     display: flex;
@@ -543,6 +563,7 @@ body::after {
     gap: 16px;
     transition: all var(--transition-med);
     position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     overflow: hidden;
 }
 .stat-card::after {
