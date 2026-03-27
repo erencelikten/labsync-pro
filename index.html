@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LabSync Pro — Prof. Dr. Denizhan Özgün | Laboratuvar Yönetim Sistemi</title>
     <meta name="description"
-        content="Profesyonel laboratuvar yönetim sistemi. Semen analizi, IVF embriyoloji, genel lab testleri ve uyuşturucu testleri.">
-    <link rel="stylesheet" href="css/style.css?v=1.1">
+        content="Profesyonel laboratuvar yönetim sistemi. Semen analizi, IVF embriyoloji, genel lab testleri ve DNA testleri.">
+    <link rel="stylesheet" href="css/style-v2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode_js@1.0.0/qrcode.min.js"></script>
 </head>
 
 <body>
+    <!-- Particles Background -->
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <div id="toastContainer"></div>
+
     <div class="app-wrapper">
         <!-- ═══ SIDEBAR ═══ -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-brand"
-                style="flex-direction: column; align-items: flex-start; gap: 10px; padding: 28px 24px 20px;">
-                <img src="assets/biyosera_logo_hz.png" alt="Biyosera" style="height: 60px; object-fit: contain;">
-                <div class="brand-subtitle"
-                    style="font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; margin-left: 4px;">
-                    LABSYNC PRO
-                </div>
+            <div class="sidebar-brand">
+                <img src="assets/biyosera_logo_hz.png" alt="Biyosera">
+                <div class="brand-subtitle">LABSYNC PRO</div>
             </div>
 
             <div class="sidebar-doctor">
@@ -60,7 +60,6 @@
                     <i class="fas fa-flask"></i>
                     <span>Genel Lab Testleri</span>
                 </div>
-
                 <div class="nav-item" data-module="dnatests" onclick="switchModule('dnatests')">
                     <i class="fas fa-dna"></i>
                     <span>DNA / Genetik</span>
@@ -78,13 +77,18 @@
             </nav>
 
             <div class="sidebar-footer">
-                <div class="version">LabSync Pro v1.0.0</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="pulse-dot"></span>
+                    <span style="font-size:11px;color:var(--neon-green);font-weight:600;">Sistem Aktif</span>
+                </div>
+                <div class="version" style="margin-top:8px;">LabSync Pro v2.0.0</div>
             </div>
         </aside>
 
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
         <!-- ═══ MAIN CONTENT ═══ -->
         <main class="main-content">
-            <!-- Top Header -->
             <header class="top-header">
                 <div class="header-left">
                     <button class="mobile-menu-btn" onclick="toggleSidebar()">
@@ -109,7 +113,7 @@
                         <i class="fas fa-calendar-alt"></i>
                         <span id="headerDate"></span>
                     </div>
-                    <button class="header-btn" onclick="window.open('patient-portal.html', '_blank')"
+                    <button class="header-btn" onclick="window.open('patient-portal-v2.html', '_blank')"
                         title="Hasta Portalı">
                         <i class="fas fa-external-link-alt"></i>
                     </button>
@@ -119,34 +123,10 @@
                 </div>
             </header>
 
-            <!-- Page Content -->
             <div class="page-content">
                 <!-- ═══ DASHBOARD ═══ -->
                 <section class="module-section active" id="module-dashboard">
-                    <!-- Dashboard Hero -->
-                    <div class="dashboard-hero card">
-                        <div class="hero-content">
-                            <h2 id="dashGreeting">Hoş Geldiniz, Dr. Denizhan</h2>
-                            <p>Bugün sistemde toplam <strong id="dashHeroPatients">0</strong> hasta ve <strong id="dashHeroTests">0</strong> test işlemi kayıtlı.</p>
-                        </div>
-                        <div class="hero-actions">
-                            <button class="btn btn-primary" onclick="switchModule('patients'); setTimeout(()=>openModal('patientModal'),300)">
-                                <i class="fas fa-plus"></i> Yeni Hasta Kaydı
-                            </button>
-                            <button class="btn btn-secondary" onclick="window.open('patient-portal.html', '_blank')">
-                                <i class="fas fa-external-link-alt"></i> Portal'a Git
-                            </button>
-                        </div>
-                        <!-- Wave decoration inside hero -->
-                        <div class="dashboard-wave" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; margin: 0;">
-                            <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-                                <path class="wave-1" d="M0,40 C320,80 640,0 960,40 C1120,60 1280,20 1440,40 L1440,80 L0,80 Z"></path>
-                                <path class="wave-2" d="M0,50 C360,10 720,70 1080,30 C1200,20 1360,50 1440,40 L1440,80 L0,80 Z"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="stats-row" style="margin-top: 24px;">
+                    <div class="stats-row">
                         <div class="stat-card">
                             <div class="stat-icon blue"><i class="fas fa-users"></i></div>
                             <div class="stat-info">
@@ -180,7 +160,7 @@
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon purple"><i class="fas fa-dna"></i></div>
+                            <div class="stat-icon pink"><i class="fas fa-dna"></i></div>
                             <div class="stat-info">
                                 <div class="stat-label">DNA / Genetik</div>
                                 <div class="stat-value" id="dashDNACount">0</div>
@@ -189,13 +169,13 @@
                         </div>
                     </div>
 
-                    <div class="dashboard-grid" style="margin-top: 24px;">
+                    <div class="dashboard-grid" style="margin-top: 20px;">
                         <div class="card chart-card">
                             <div class="card-header">
                                 <div class="card-title"><i class="fas fa-chart-pie"></i> Test Dağılımı</div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-container" style="height: 250px;">
+                                <div class="chart-container" style="height: 260px;">
                                     <canvas id="testDistChart"></canvas>
                                 </div>
                             </div>
@@ -206,19 +186,20 @@
                                 <div class="card-title"><i class="fas fa-chart-line"></i> Aylık Test Trendi</div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-container" style="height: 250px;">
+                                <div class="chart-container" style="height: 260px;">
                                     <canvas id="monthlyTrendChart"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="dashboard-grid-secondary">
+                    <div class="dashboard-grid-secondary" style="margin-top: 16px;">
                         <div class="card log-card">
                             <div class="card-header">
-                                <div class="card-title"><i class="fas fa-history"></i> Sistem Logları & Aktiviteler</div>
+                                <div class="card-title"><i class="fas fa-history"></i> Sistem Logları & Aktiviteler
+                                </div>
                             </div>
-                            <div class="card-body" style="height: 320px; overflow-y: auto;">
+                            <div class="card-body" style="height: 300px; overflow-y: auto;">
                                 <div id="recentActivities" class="timeline">
                                     <div class="empty-state">
                                         <i class="fas fa-inbox"></i>
@@ -230,12 +211,15 @@
                         </div>
                         <div class="card status-card">
                             <div class="card-header">
-                                <div class="card-title"><i class="fas fa-bell"></i> Hızlı Durum Özeti</div>
+                                <div class="card-title"><i class="fas fa-bell"></i> Hızlı Durum</div>
                             </div>
                             <div class="card-body" style="padding: 0;">
                                 <div class="status-list" id="dashStatusList">
                                     <div class="status-item">
-                                        <div class="status-icon" style="color: var(--warning); background: var(--warning-bg);"><i class="fas fa-clock"></i></div>
+                                        <div class="status-icon"
+                                            style="color: var(--neon-orange); background: var(--warning-dim);">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
                                         <div class="status-details">
                                             <h4>Bekleyen Testler</h4>
                                             <p>İşlem bekleyen kayıtlar</p>
@@ -243,7 +227,10 @@
                                         <div class="status-value" id="statusPending">0</div>
                                     </div>
                                     <div class="status-item">
-                                        <div class="status-icon" style="color: var(--success); background: var(--success-bg);"><i class="fas fa-check-circle"></i></div>
+                                        <div class="status-icon"
+                                            style="color: var(--neon-green); background: var(--success-dim);">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
                                         <div class="status-details">
                                             <h4>Onaylanan Sonuçlar</h4>
                                             <p>Bu ay tamamlananlar</p>
@@ -251,12 +238,18 @@
                                         <div class="status-value" id="statusApproved">0</div>
                                     </div>
                                     <div class="status-item">
-                                        <div class="status-icon" style="color: var(--info); background: var(--info-bg);"><i class="fas fa-desktop"></i></div>
+                                        <div class="status-icon"
+                                            style="color: var(--neon-blue); background: var(--accent-dim);">
+                                            <i class="fas fa-database"></i>
+                                        </div>
                                         <div class="status-details">
                                             <h4>Sistem Durumu</h4>
                                             <p>Supabase Bağlantısı</p>
                                         </div>
-                                        <div class="status-value" style="color: var(--success); font-size: 13px;"><i class="fas fa-wifi"></i> Online</div>
+                                        <div class="status-value"
+                                            style="color: var(--neon-green); font-size: 13px; display:flex;align-items:center;gap:6px;">
+                                            <span class="pulse-dot"></span> Online
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +328,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body" style="padding: 0;">
                             <div class="table-wrapper">
@@ -384,7 +376,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body" style="padding: 0;">
                             <div class="table-wrapper">
@@ -441,7 +432,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body" style="padding: 0;">
                             <div class="table-wrapper">
@@ -475,8 +465,6 @@
                     </div>
                 </section>
 
-
-
                 <!-- ═══ DNA / GENETIK TESTS ═══ -->
                 <section class="module-section" id="module-dnatests">
                     <div class="toolbar">
@@ -505,7 +493,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body" style="padding: 0;">
                             <div class="table-wrapper">
@@ -551,7 +538,6 @@
                                 <option value="semen">Semen Analizi</option>
                                 <option value="ivf">IVF Raporu</option>
                                 <option value="labtest">Lab Test Raporu</option>
-
                                 <option value="dnatest">DNA / Genetik Test Raporu</option>
                             </select>
                         </div>
@@ -564,7 +550,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="card" id="reportPreviewCard">
                         <div class="card-body">
                             <div class="empty-state" id="reportEmptyState">
@@ -612,13 +597,15 @@
                                 </p>
                                 <div class="form-group" style="margin-bottom: 16px;">
                                     <label class="form-label">Hasta Seçin</label>
-                                    <select class="form-control" id="qrPatientSelect" onchange="generatePatientQR()">
+                                    <select class="form-control" id="qrPatientSelect"
+                                        onchange="generatePatientQR()">
                                         <option value="">-- Hasta seçin --</option>
                                     </select>
                                 </div>
                                 <div id="qrCodeDisplay" class="qr-display" style="display:none;">
                                     <div id="qrCodeCanvas"></div>
-                                    <button class="btn btn-secondary btn-sm" onclick="printQRCode()">
+                                    <button class="btn btn-secondary btn-sm" onclick="printQRCode()"
+                                        style="margin-top:12px;">
                                         <i class="fas fa-print"></i> QR Kodu Yazdır
                                     </button>
                                 </div>
@@ -636,9 +623,10 @@
     <div class="modal-overlay" id="patientModal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-user-plus"></i> <span id="patientModalTitle">Yeni Hasta</span>
-                </div>
-                <button class="modal-close" onclick="closeModal('patientModal')"><i class="fas fa-times"></i></button>
+                <div class="modal-title"><i class="fas fa-user-plus"></i> <span id="patientModalTitle">Yeni
+                        Hasta</span></div>
+                <button class="modal-close" onclick="closeModal('patientModal')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="patientForm" class="form-grid">
@@ -692,7 +680,8 @@
                     </div>
                     <div class="form-group full-width">
                         <label class="form-label">Notlar</label>
-                        <textarea class="form-control" id="patientNotes" rows="3" placeholder="Ek notlar..."></textarea>
+                        <textarea class="form-control" id="patientNotes" rows="3"
+                            placeholder="Ek notlar..."></textarea>
                     </div>
                 </form>
             </div>
@@ -710,7 +699,8 @@
         <div class="modal" style="max-width: 900px;">
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-vial"></i> Semen Analizi</div>
-                <button class="modal-close" onclick="closeModal('semenModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('semenModal')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="semenForm" class="form-grid">
@@ -738,9 +728,7 @@
                             <option value="Özel Kondom">Özel Kondom</option>
                         </select>
                     </div>
-
                     <div class="section-divider full-width"><span>Makroskopik İnceleme</span></div>
-
                     <div class="form-group">
                         <label class="form-label">Hacim (ml)</label>
                         <input type="number" class="form-control" id="semenVolume" step="0.1" min="0"
@@ -773,9 +761,7 @@
                         <input type="number" class="form-control" id="semenPH" step="0.1" min="0" max="14"
                             placeholder="WHO: ≥7.2">
                     </div>
-
                     <div class="section-divider full-width"><span>Mikroskopik İnceleme</span></div>
-
                     <div class="form-group">
                         <label class="form-label">Konsantrasyon (milyon/ml)</label>
                         <input type="number" class="form-control" id="semenConcentration" step="0.1" min="0"
@@ -798,15 +784,16 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">İmmotil (%)</label>
-                        <input type="number" class="form-control" id="semenImmotile" min="0" max="100" placeholder="%">
+                        <input type="number" class="form-control" id="semenImmotile" min="0" max="100"
+                            placeholder="%" readonly>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Toplam Motilite (%)</label>
                         <input type="number" class="form-control" id="semenTotalMotility" min="0" max="100"
-                            placeholder="WHO: ≥40%">
+                            placeholder="WHO: ≥40%" readonly>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Normal Morfoloji - Kruger (%)</label>
+                        <label class="form-label">Normal Morfoloji (%)</label>
                         <input type="number" class="form-control" id="semenMorphology" min="0" max="100"
                             placeholder="WHO: ≥4%">
                     </div>
@@ -815,27 +802,40 @@
                         <input type="number" class="form-control" id="semenVitality" min="0" max="100"
                             placeholder="WHO: ≥58%">
                     </div>
+                    <div class="section-divider full-width"><span>Ek Bulgular</span></div>
                     <div class="form-group">
-                        <label class="form-label">Yuvarlak Hücre (milyon/ml)</label>
+                        <label class="form-label">Yuvarlak Hücreler (milyon/ml)</label>
                         <input type="number" class="form-control" id="semenRoundCells" step="0.1" min="0"
-                            placeholder="milyon/ml">
+                            placeholder="Değer">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Lökosit (milyon/ml)</label>
                         <input type="number" class="form-control" id="semenWBC" step="0.1" min="0"
-                            placeholder="WHO: <1 milyon/ml">
+                            placeholder="Normal: <1.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sonuç Değerlendirme</label>
+                        <select class="form-control" id="semenResult">
+                            <option value="Normozoospermi">Normozoospermi</option>
+                            <option value="Oligozoospermi">Oligozoospermi</option>
+                            <option value="Astenozoospermi">Astenozoospermi</option>
+                            <option value="Teratozoospermi">Teratozoospermi</option>
+                            <option value="OAT">OAT Sendromu</option>
+                            <option value="Azoospermi">Azoospermi</option>
+                            <option value="Kriptozoospermi">Kriptozoospermi</option>
+                        </select>
                     </div>
                     <div class="form-group full-width">
-                        <label class="form-label">Ek Notlar</label>
+                        <label class="form-label">Notlar</label>
                         <textarea class="form-control" id="semenNotes" rows="2"
-                            placeholder="Aglütinasyon, debris, vb..."></textarea>
+                            placeholder="Ek açıklamalar..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('semenModal')">İptal</button>
                 <button class="btn btn-primary" onclick="saveSemenAnalysis()">
-                    <i class="fas fa-save"></i> Kaydet & Değerlendir
+                    <i class="fas fa-save"></i> Kaydet
                 </button>
             </div>
         </div>
@@ -846,7 +846,8 @@
         <div class="modal" style="max-width: 900px;">
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-baby"></i> IVF / Embriyoloji Kaydı</div>
-                <button class="modal-close" onclick="closeModal('ivfModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('ivfModal')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="ivfForm" class="form-grid">
@@ -858,16 +859,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Siklus Başlangıç <span class="required">*</span></label>
+                        <label class="form-label">Başlangıç Tarihi <span class="required">*</span></label>
                         <input type="date" class="form-control" id="ivfStartDate" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Protokol</label>
                         <select class="form-control" id="ivfProtocol">
                             <option value="Antagonist">Antagonist</option>
-                            <option value="Agonist (Uzun)">Agonist (Uzun)</option>
-                            <option value="Agonist (Kısa)">Agonist (Kısa)</option>
-                            <option value="Minimal Stimülasyon">Minimal Stimülasyon</option>
+                            <option value="Uzun Protokol">Uzun Protokol</option>
+                            <option value="Kısa Protokol">Kısa Protokol</option>
+                            <option value="Mikrodoz">Mikrodoz</option>
                             <option value="Doğal Siklus">Doğal Siklus</option>
                         </select>
                     </div>
@@ -877,73 +878,32 @@
                             <option value="ICSI">ICSI</option>
                             <option value="Klasik IVF">Klasik IVF</option>
                             <option value="IMSI">IMSI</option>
-                            <option value="PICSI">PICSI</option>
                         </select>
                     </div>
-
                     <div class="section-divider full-width"><span>Oosit & Fertilizasyon</span></div>
-
                     <div class="form-group">
-                        <label class="form-label">Toplanan Oosit Sayısı</label>
-                        <input type="number" class="form-control" id="ivfOocyteCount" min="0" placeholder="Toplam">
+                        <label class="form-label">Toplam Oosit</label>
+                        <input type="number" class="form-control" id="ivfOocyteCount" min="0">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">MII (Matür) Oosit</label>
-                        <input type="number" class="form-control" id="ivfMatureOocyte" min="0"
-                            placeholder="Matür oosit">
+                        <label class="form-label">Matür (MII) Oosit</label>
+                        <input type="number" class="form-control" id="ivfMatureOocyte" min="0">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Fertilize Olan</label>
-                        <input type="number" class="form-control" id="ivfFertilized" min="0" placeholder="2PN">
+                        <input type="number" class="form-control" id="ivfFertilized" min="0">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Fertilizasyon Oranı (%)</label>
-                        <input type="number" class="form-control" id="ivfFertRate" min="0" max="100"
-                            placeholder="Otomatik hesaplanır" readonly>
+                        <input type="number" class="form-control" id="ivfFertRate" min="0" max="100" readonly>
                     </div>
-
                     <div class="section-divider full-width"><span>Embriyo Gelişimi</span></div>
-
                     <div class="form-group">
-                        <label class="form-label">Day 3 Embriyo Sayısı</label>
-                        <input type="number" class="form-control" id="ivfDay3Count" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Day 3 Grade (Best)</label>
-                        <select class="form-control" id="ivfDay3Grade">
-                            <option value="">Seçin</option>
-                            <option value="Grade 1">Grade 1 (Mükemmel)</option>
-                            <option value="Grade 2">Grade 2 (İyi)</option>
-                            <option value="Grade 3">Grade 3 (Orta)</option>
-                            <option value="Grade 4">Grade 4 (Zayıf)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Blastosist Sayısı (Day 5/6)</label>
+                        <label class="form-label">Blastosist Sayısı</label>
                         <input type="number" class="form-control" id="ivfBlastCount" min="0">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Blastosist Grade (Best)</label>
-                        <input type="text" class="form-control" id="ivfBlastGrade" placeholder="örn: 4AA, 3AB">
-                    </div>
-
-                    <div class="section-divider full-width"><span>Transfer & Sonuç</span></div>
-
-                    <div class="form-group">
-                        <label class="form-label">Transfer Tarihi</label>
-                        <input type="date" class="form-control" id="ivfTransferDate">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Transfer Günü</label>
-                        <select class="form-control" id="ivfTransferDay">
-                            <option value="">Seçin</option>
-                            <option value="Day 3">Day 3</option>
-                            <option value="Day 5">Day 5</option>
-                            <option value="Day 6">Day 6</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Transfer Edilen Embriyo</label>
+                        <label class="form-label">Transfer Edilen</label>
                         <input type="number" class="form-control" id="ivfTransferCount" min="0">
                     </div>
                     <div class="form-group">
@@ -955,16 +915,15 @@
                         <select class="form-control" id="ivfStatus">
                             <option value="Devam Ediyor">Devam Ediyor</option>
                             <option value="Transfer Yapıldı">Transfer Yapıldı</option>
-                            <option value="β-hCG Pozitif">β-hCG Pozitif</option>
-                            <option value="β-hCG Negatif">β-hCG Negatif</option>
-                            <option value="Klinik Gebelik">Klinik Gebelik</option>
-                            <option value="İptal">İptal</option>
-                            <option value="Freeze All">Freeze All</option>
+                            <option value="Gebelik (+)">Gebelik (+)</option>
+                            <option value="Gebelik (-)">Gebelik (-)</option>
+                            <option value="İptal Edildi">İptal Edildi</option>
                         </select>
                     </div>
                     <div class="form-group full-width">
                         <label class="form-label">Notlar</label>
-                        <textarea class="form-control" id="ivfNotes" rows="2" placeholder="Ek notlar..."></textarea>
+                        <textarea class="form-control" id="ivfNotes" rows="2"
+                            placeholder="Klinik notlar..."></textarea>
                     </div>
                 </form>
             </div>
@@ -981,8 +940,9 @@
     <div class="modal-overlay" id="labTestModal">
         <div class="modal" style="max-width: 900px;">
             <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-flask"></i> Lab Testi Girişi</div>
-                <button class="modal-close" onclick="closeModal('labTestModal')"><i class="fas fa-times"></i></button>
+                <div class="modal-title"><i class="fas fa-flask"></i> Genel Lab Testi</div>
+                <button class="modal-close" onclick="closeModal('labTestModal')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="labTestForm" class="form-grid">
@@ -994,19 +954,19 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Tarih <span class="required">*</span></label>
-                        <input type="date" class="form-control" id="labTestDate" required>
-                    </div>
-                    <div class="form-group">
                         <label class="form-label">Test Tipi <span class="required">*</span></label>
-                        <select class="form-control" id="labTestType" required onchange="loadLabTestParameters()">
+                        <select class="form-control" id="labTestType" required onchange="loadLabParameters()">
                             <option value="">Seçin</option>
                             <option value="Hormon">Hormon Paneli</option>
                             <option value="Hemogram">Hemogram</option>
-                            <option value="Bulaşıcı">Bulaşıcı Hastalık Taraması</option>
+                            <option value="Bulaşıcı">Bulaşıcı Hastalık</option>
                             <option value="Koagülasyon">Koagülasyon</option>
                             <option value="Biyokimya">Biyokimya</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tarih <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="labTestDate" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Durum</label>
@@ -1015,12 +975,8 @@
                             <option value="Sonuçlandı">Sonuçlandı</option>
                         </select>
                     </div>
-                    <div class="full-width" id="labParametersArea" style="margin-top: 12px;">
-                        <div class="section-divider"><span>Test Parametreleri</span></div>
-                        <p style="color: var(--text-muted); font-size: 13px; text-align: center;">Test tipi seçerek
-                            parametreleri yükleyin</p>
-                    </div>
                 </form>
+                <div id="labParametersArea" style="margin-top: 16px;"><div class="section-divider"><span>Test Parametreleri</span></div><p style="color:var(--text-muted);font-size:13px;text-align:center;">Test tipi seçerek parametreleri yükleyin</p></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('labTestModal')">İptal</button>
@@ -1031,49 +987,13 @@
         </div>
     </div>
 
-
-
-    <!-- Patient Detail Modal -->
-    <div class="modal-overlay" id="patientDetailModal">
-        <div class="modal" style="max-width: 800px;">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-user"></i> <span id="detailPatientName">Hasta Detayı</span>
-                </div>
-                <button class="modal-close" onclick="closeModal('patientDetailModal')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="patientDetailContent">
-                <!-- Dynamically filled -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Semen Detail Modal -->
-    <div class="modal-overlay" id="semenDetailModal">
-        <div class="modal" style="max-width: 900px;">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-vial"></i> Semen Analizi Detayı</div>
-                <button class="modal-close" onclick="closeModal('semenDetailModal')"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="semenDetailContent">
-                <!-- Dynamically filled -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('semenDetailModal')">Kapat</button>
-                <button class="btn btn-primary" onclick="printSemenReport()" id="printSemenBtn">
-                    <i class="fas fa-print"></i> Rapor Yazdır
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- DNA / Genetik Test Modal -->
+    <!-- DNA Test Modal -->
     <div class="modal-overlay" id="dnaTestModal">
         <div class="modal" style="max-width: 900px;">
             <div class="modal-header">
                 <div class="modal-title"><i class="fas fa-dna"></i> DNA / Genetik Test</div>
-                <button class="modal-close" onclick="closeModal('dnaTestModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('dnaTestModal')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="dnaTestForm" class="form-grid">
@@ -1085,13 +1005,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Tarih <span class="required">*</span></label>
-                        <input type="date" class="form-control" id="dnaTestDate" required>
-                    </div>
-                    <div class="form-group">
                         <label class="form-label">Test Tipi <span class="required">*</span></label>
-                        <select class="form-control" id="dnaTestType" required onchange="loadDNATestParameters()">
-                            <option value="">Seçiniz</option>
+                        <select class="form-control" id="dnaTestType" required onchange="loadDNAParameters()">
+                            <option value="">Seçin</option>
                             <option value="Karyotip">Karyotip Analizi</option>
                             <option value="Y Mikrodelesyon">Y Mikrodelesyon</option>
                             <option value="CFTR Mutasyon">CFTR Mutasyon</option>
@@ -1106,35 +1022,38 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Tarih <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="dnaTestDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Laboratuvar</label>
+                        <input type="text" class="form-control" id="dnaTestLab" placeholder="Dış laboratuvar adı">
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Numune Tipi</label>
                         <select class="form-control" id="dnaTestSampleType">
                             <option value="Kan (EDTA)">Kan (EDTA)</option>
-                            <option value="Trofektoderm Biyopsi">Trofektoderm Biyopsi</option>
-                            <option value="Blastomer Biyopsi">Blastomer Biyopsi</option>
-                            <option value="Semen">Semen</option>
-                            <option value="Bukkal Sürüntü">Bukkal Sürüntü</option>
-                            <option value="Amniyotik Sıvı">Amniyotik Sıvı</option>
-                            <option value="Koryon Villus">Koryon Villus</option>
+                            <option value="Tükürük">Tükürük</option>
+                            <option value="Doku">Doku</option>
+                            <option value="Embriyo Biyopsisi">Embriyo Biyopsisi</option>
                         </select>
                     </div>
-                    <div class="form-group full-width">
-                        <label class="form-label">Gönderildiği Laboratuvar</label>
-                        <input type="text" class="form-control" id="dnaTestLab"
-                            placeholder="örn: Intergen, Genmark, Mikrogen">
+                    <div class="form-group">
+                        <label class="form-label">Genel Sonuç</label>
+                        <select class="form-control" id="dnaOverallResult">
+                            <option value="Beklemede">Beklemede</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Anormal">Anormal</option>
+                            <option value="Taşıyıcı">Taşıyıcı</option>
+                        </select>
                     </div>
-
-                    <div class="full-width" id="dnaParametersArea">
-                        <div class="section-divider"><span>Test Parametreleri</span></div>
-                        <p style="color:var(--text-muted);font-size:13px;text-align:center;">DNA test tipi seçerek
-                            parametreleri yükleyin</p>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label class="form-label">Klinik Notlar</label>
+                    <div class="form-group">
+                        <label class="form-label">Notlar</label>
                         <textarea class="form-control" id="dnaTestNotes" rows="2"
-                            placeholder="Genetik danışman notu, aile öyküsü..."></textarea>
+                            placeholder="Klinik notlar..."></textarea>
                     </div>
                 </form>
+                <div id="dnaParametersArea" style="margin-top: 16px;"><div class="section-divider"><span>Test Parametreleri</span></div><p style="color:var(--text-muted);font-size:13px;text-align:center;">DNA test tipi seçerek parametreleri yükleyin</p></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('dnaTestModal')">İptal</button>
@@ -1145,93 +1064,54 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-client.js"></script>
-
-    <!-- ═══ MOBILE BOTTOM NAV ═══ -->
-    <nav class="mobile-bottom-nav">
-        <div class="nav-item active" data-module="dashboard" onclick="switchModule('dashboard')">
-            <i class="fas fa-chart-line"></i>
-            <span>Dashboard</span>
-        </div>
-        <div class="nav-item" data-module="patients" onclick="switchModule('patients')">
-            <i class="fas fa-users"></i>
-            <span>Hastalar</span>
-        </div>
-        <div class="nav-item-center" onclick="toggleMobileSubmenu()">
-            <div class="fab-center">
-                <i class="fas fa-plus"></i>
+    <!-- Semen Detail Modal -->
+    <div class="modal-overlay" id="semenDetailModal">
+        <div class="modal" style="max-width: 850px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-vial"></i> Semen Analizi Detayı</div>
+                <button class="modal-close" onclick="closeModal('semenDetailModal')"><i class="fas fa-times"></i></button>
             </div>
-        </div>
-        <div class="nav-item" data-module="qrscanner" onclick="switchModule('qrscanner')">
-            <i class="fas fa-qrcode"></i>
-            <span>Tarayıcı</span>
-        </div>
-        <div class="nav-item" data-module="reports" onclick="switchModule('reports')">
-            <i class="fas fa-file-pdf"></i>
-            <span>Raporlar</span>
-        </div>
-    </nav>
-
-    <!-- Mobile Submenu Overlay -->
-    <div class="mobile-submenu-overlay" id="mobileSubmenu">
-        <div class="mobile-submenu-content">
-            <div class="submenu-header">
-                <h3>Yeni İşlem / Test</h3>
-                <button class="close-btn" onclick="toggleMobileSubmenu()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="submenu-grid">
-                <div class="submenu-item" onclick="switchModule('semen'); toggleMobileSubmenu()">
-                    <div class="icon-circle" style="background:rgba(0,212,170,0.15);color:var(--accent);"><i
-                            class="fas fa-vial"></i></div>
-                    <span>Semen Analizi</span>
-                </div>
-                <div class="submenu-item" onclick="switchModule('ivf'); toggleMobileSubmenu()">
-                    <div class="icon-circle" style="background:rgba(171,71,188,0.15);color:#AB47BC;"><i
-                            class="fas fa-baby"></i></div>
-                    <span>Tüp Bebek (IVF)</span>
-                </div>
-                <div class="submenu-item" onclick="switchModule('labtests'); toggleMobileSubmenu()">
-                    <div class="icon-circle" style="background:rgba(33,150,243,0.15);color:#2196F3;"><i
-                            class="fas fa-flask"></i></div>
-                    <span>Genel Lab</span>
-                </div>
-                <div class="submenu-item" onclick="switchModule('dnatests'); toggleMobileSubmenu()">
-                    <div class="icon-circle" style="background:rgba(224,64,251,0.15);color:#E040FB;"><i
-                            class="fas fa-dna"></i></div>
-                    <span>Genetik / DNA</span>
-                </div>
+            <div class="modal-body" id="semenDetailContent"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('semenDetailModal')">Kapat</button>
+                <button class="btn btn-primary" id="printSemenBtn" onclick="printSemenReport()">
+                    <i class="fas fa-print"></i> Rapor Yazdır
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Core Scripts -->
-    <script src="js/app.js?v=1.1"></script>
-    <script src="js/patients.js?v=1.1"></script>
+    <!-- Patient Detail Modal -->
+    <div class="modal-overlay" id="patientDetailModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-user"></i> <span id="detailPatientName">Hasta Detayı</span></div>
+                <button class="modal-close" onclick="closeModal('patientDetailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="patientDetailContent"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('patientDetailModal')">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/seed-data.js"></script>
+    <script src="js/app-v2.js"></script>
+    <script src="js/patients.js"></script>
+    <script src="js/semen-analysis.js"></script>
+    <script src="js/ivf-module.js"></script>
+    <script src="js/lab-tests.js"></script>
+    <script src="js/dna-tests.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/qr-handler.js"></script>
     <script>
-        function toggleMobileSubmenu() {
-            const menu = document.getElementById('mobileSubmenu');
-            menu.classList.toggle('active');
-        }
+        // Function aliases for HTML onchange compatibility
+        function loadLabParameters() { if (typeof loadLabTestParameters === 'function') loadLabTestParameters(); }
+        function loadDNAParameters() { if (typeof loadDNATestParameters === 'function') loadDNATestParameters(); }
     </script>
-
-    <!-- Modüller -->
-    <script src="js/semen-analysis.js?v=1.1"></script>
-    <script src="js/ivf-module.js?v=1.1"></script>
-    <script src="js/lab-tests.js?v=1.1"></script>
-    <script src="js/dna-tests.js?v=1.1"></script>
-
-    <!-- UI/Araçlar -->
-    <script src="js/reports.js?v=1.1"></script>
-    <script src="js/qr-handler.js?v=1.1"></script>
 </body>
 
 </html>

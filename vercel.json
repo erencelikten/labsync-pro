@@ -1,9 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index-v2.html" },
-    { "source": "/index.html", "destination": "/index-v2.html" },
-    { "source": "/patient-portal.html", "destination": "/patient-portal-v2.html" },
-    { "source": "/portal", "destination": "/patient-portal-v2.html" }
+    { "source": "/portal", "destination": "/patient-portal.html" }
   ],
   "headers": [
     {
