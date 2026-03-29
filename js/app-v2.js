@@ -313,57 +313,6 @@ function initParticles() {
         p.style.boxShadow = `0 0 ${4 + Math.random() * 6}px ${p.style.background}`;
         container.appendChild(p);
     }
-
-    // Floating sperm cells — horizontal, white, depth layers
-    const spermCount = window.innerWidth < 768 ? 5 : 12;
-    const depths = [
-        { cls: 'sperm-near', opacity: 0.18, tailWidth: 2.5, headR: 10, innerR: 6 },
-        { cls: 'sperm-mid',  opacity: 0.10, tailWidth: 2,   headR: 9,  innerR: 5 },
-        { cls: 'sperm-far',  opacity: 0.06, tailWidth: 1.5, headR: 8,  innerR: 4 },
-    ];
-    const rightAnims = ['spermSwimRight', 'spermSwimRight2'];
-    const leftAnims  = ['spermSwimLeft',  'spermSwimLeft2'];
-
-    for (let i = 0; i < spermCount; i++) {
-        const sperm = document.createElement('div');
-        const depth = depths[Math.floor(Math.random() * depths.length)];
-        const goRight = Math.random() > 0.5;
-        const anim = goRight
-            ? rightAnims[Math.floor(Math.random() * rightAnims.length)]
-            : leftAnims[Math.floor(Math.random() * leftAnims.length)];
-
-        const fillColor = `rgba(255, 255, 255, ${depth.opacity + 0.05})`;
-        const strokeColor = `rgba(255, 255, 255, ${depth.opacity})`;
-        const innerColor = `rgba(255, 255, 255, ${depth.opacity + 0.1})`;
-
-        sperm.className = `sperm-cell ${depth.cls}`;
-        sperm.style.setProperty('--sperm-opacity', depth.opacity);
-
-        // SVG: head facing LEFT (tail goes right), mirrored for right-moving via scaleX
-        sperm.innerHTML = `<svg viewBox="0 0 70 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="${goRight ? '' : 'transform:scaleX(-1)'}">
-            <circle cx="14" cy="20" r="${depth.headR}" fill="${fillColor}" />
-            <circle cx="14" cy="20" r="${depth.innerR}" fill="${innerColor}" />
-            <path d="M24 20 C30 14, 36 26, 42 18 C48 10, 54 28, 60 20 C64 14, 68 22, 68 22"
-                  stroke="${strokeColor}" stroke-width="${depth.tailWidth}" stroke-linecap="round" fill="none">
-                <animate attributeName="d"
-                    values="M24 20 C30 14, 36 26, 42 18 C48 10, 54 28, 60 20 C64 14, 68 22, 68 22;
-                            M24 20 C30 26, 36 14, 42 22 C48 28, 54 12, 60 20 C64 26, 68 18, 68 18;
-                            M24 20 C30 14, 36 26, 42 18 C48 10, 54 28, 60 20 C64 14, 68 22, 68 22"
-                    dur="${1.2 + Math.random() * 1.2}s" repeatCount="indefinite" />
-            </path>
-        </svg>`;
-
-        // Position: random vertical, horizontal start is handled by animation
-        sperm.style.top = (5 + Math.random() * 85) + '%';
-        sperm.style.left = '0';
-        sperm.style.animationName = anim;
-        sperm.style.animationDuration = (20 + Math.random() * 20) + 's';
-        sperm.style.animationDelay = Math.random() * 20 + 's';
-        sperm.style.animationTimingFunction = 'linear';
-        sperm.style.animationIterationCount = 'infinite';
-
-        container.appendChild(sperm);
-    }
 }
 
 // ═══════════════════════════════════════════════════
