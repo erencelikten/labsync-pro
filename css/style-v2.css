@@ -161,7 +161,7 @@ body::after {
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
-    background: rgba(8, 12, 24, 0.80);
+    background: rgba(8, 12, 24, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border-right: 1px solid var(--border-glass);
@@ -326,7 +326,7 @@ body::after {
 /* ─── Top Header ─── */
 .top-header {
     height: var(--header-height);
-    background: rgba(8, 12, 24, 0.80);
+    background: rgba(8, 12, 24, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border-bottom: 1px solid var(--border-glass);
@@ -382,7 +382,7 @@ body::after {
 .header-search input:focus {
     border-color: var(--neon-blue);
     box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
-    background: rgba(15, 22, 40, 0.7);
+    background: rgba(15, 22, 40, 0.15);
 }
 .header-search input::placeholder { color: var(--text-muted); }
 .header-date {
@@ -450,7 +450,7 @@ body::after {
 
 /* ─── Cards ─── */
 .card {
-    background: rgba(15, 22, 40, 0.80);
+    background: rgba(15, 22, 40, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -498,7 +498,7 @@ body::after {
     gap: 16px;
 }
 .stat-card {
-    background: rgba(15, 22, 40, 0.80);
+    background: rgba(15, 22, 40, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border: 1px solid rgba(255, 255, 255, 0.08);
