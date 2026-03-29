@@ -116,7 +116,7 @@ body::after {
     height: auto;
     transform: translate(-50%, -50%);
     object-fit: cover;
-    opacity: 0.3;
+    opacity: 0.1;
 }
 .video-bg-overlay {
     position: absolute;
