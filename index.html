@@ -14,13 +14,39 @@
 </head>
 
 <body>
-    <!-- Background Video -->
+    <!-- Background Video — Seamless Crossfade Loop -->
     <div class="video-bg-container">
-        <video class="video-bg" autoplay muted loop playsinline id="bgVideo">
+        <video class="video-bg video-bg-a" autoplay muted playsinline id="bgVideoA">
+            <source src="assets/bg-video.mp4" type="video/mp4">
+        </video>
+        <video class="video-bg video-bg-b" autoplay muted playsinline id="bgVideoB" style="opacity:0">
             <source src="assets/bg-video.mp4" type="video/mp4">
         </video>
         <div class="video-bg-overlay"></div>
     </div>
+    <script>
+    (function(){
+        const vA = document.getElementById('bgVideoA');
+        const vB = document.getElementById('bgVideoB');
+        if(!vA || !vB) return;
+        const FADE = 1.5; // crossfade seconds
+        let active = vA, standby = vB;
+        function swap(){ [active, standby] = [standby, active]; }
+        function onTimeUpdate(){
+            const remaining = active.duration - active.currentTime;
+            if(remaining <= FADE && standby.style.opacity === '0'){
+                standby.currentTime = 0;
+                standby.play();
+                standby.style.opacity = '1';
+                active.style.opacity = '0';
+                setTimeout(()=>{ active.pause(); swap(); }, FADE * 1000);
+            }
+        }
+        vA.addEventListener('timeupdate', onTimeUpdate);
+        vB.addEventListener('timeupdate', onTimeUpdate);
+        vA.play().catch(()=>{});
+    })();
+    </script>
 
     <!-- Particles Background -->
     <div class="particles-container" id="particlesContainer"></div>
