@@ -797,3 +797,60 @@ function closeMobileMore() {
         document.body.style.overflow = '';
     }
 }
+
+// ─── Mobile Header Hamburger Menu ───
+function toggleMobileHeaderMenu() {
+    const dropdown = document.getElementById('mobileHeaderDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+        // Sync mobile date
+        const dateEl = document.getElementById('headerDate');
+        const mobileDateEl = document.getElementById('headerDateMobile');
+        if (dateEl && mobileDateEl) mobileDateEl.textContent = dateEl.textContent;
+    }
+}
+
+function closeMobileHeaderMenu() {
+    const dropdown = document.getElementById('mobileHeaderDropdown');
+    if (dropdown) dropdown.classList.remove('open');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('mobileHeaderDropdown');
+    const btn = document.getElementById('mobileHamburgerBtn');
+    if (dropdown && dropdown.classList.contains('open') &&
+        !dropdown.contains(e.target) && !btn.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
+// ─── Mobile Search ───
+function mobileSearchHandler(event) {
+    const query = event.target.value.trim().toLowerCase();
+    const container = document.getElementById('mobileSearchResults');
+    if (!container) return;
+    if (query.length < 2) { container.innerHTML = ''; return; }
+
+    const results = DB.patients.filter(p =>
+        p.firstName.toLowerCase().includes(query) ||
+        p.lastName.toLowerCase().includes(query) ||
+        p.tc.includes(query) ||
+        p.id.toLowerCase().includes(query)
+    );
+
+    if (results.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text-muted);"><i class="fas fa-search" style="font-size:24px;margin-bottom:8px;display:block;"></i>Sonuç bulunamadı</div>';
+        return;
+    }
+
+    container.innerHTML = results.map(p => `
+        <div class="mhd-item" onclick="document.getElementById('mobileSearchOverlay').classList.remove('open'); switchModule('patients'); setTimeout(() => showPatientDetail('${p.id}'), 300);" style="padding:14px;">
+            <i class="fas fa-user" style="color:var(--neon-blue);"></i>
+            <div>
+                <div style="color:var(--text-white);font-weight:600;font-size:14px;">${p.firstName} ${p.lastName}</div>
+                <div style="color:var(--text-muted);font-size:11px;">${p.id} · ${p.tc || ''}</div>
+            </div>
+        </div>
+    `).join('');
+}

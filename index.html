@@ -147,13 +147,38 @@
                         <i class="fas fa-calendar-alt"></i>
                         <span id="headerDate"></span>
                     </div>
-                    <button class="header-btn" onclick="window.open('patient-portal.html', '_blank')"
+                    <!-- Desktop buttons -->
+                    <button class="header-btn desktop-only" onclick="window.open('patient-portal.html', '_blank')"
                         title="Hasta Portalı">
                         <i class="fas fa-external-link-alt"></i>
                     </button>
-                    <button class="header-btn" onclick="exportAllData()" title="Verileri Dışa Aktar">
+                    <button class="header-btn desktop-only" onclick="exportAllData()" title="Verileri Dışa Aktar">
                         <i class="fas fa-download"></i>
                     </button>
+                    <!-- Mobile hamburger -->
+                    <button class="header-btn mobile-hamburger" onclick="toggleMobileHeaderMenu()" id="mobileHamburgerBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <!-- Mobile Header Dropdown -->
+                <div class="mobile-header-dropdown" id="mobileHeaderDropdown">
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); document.getElementById('mobileSearchOverlay').classList.add('open')">
+                        <i class="fas fa-search"></i>
+                        <span>Hasta Ara</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); window.open('patient-portal.html', '_blank')">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Hasta Portalı</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); exportAllData()">
+                        <i class="fas fa-download"></i>
+                        <span>Verileri Dışa Aktar</span>
+                    </div>
+                    <div class="mhd-divider"></div>
+                    <div class="mhd-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="headerDateMobile"></span>
+                    </div>
                 </div>
             </header>
 
@@ -1227,6 +1252,17 @@
                 <span>QR Tarayıcı</span>
             </div>
         </div>
+    </div>
+
+    <!-- Mobile Search Overlay -->
+    <div class="mobile-search-overlay" id="mobileSearchOverlay">
+        <div class="mobile-search-bar">
+            <input type="text" placeholder="Hasta ara (Ad, TC, ID)..." id="mobileSearchInput" onkeyup="mobileSearchHandler(event)" autofocus>
+            <button class="mobile-search-close" onclick="document.getElementById('mobileSearchOverlay').classList.remove('open')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="mobileSearchResults"></div>
     </div>
 
     <!-- ═══ SCRIPTS ═══ -->
