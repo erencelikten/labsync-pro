@@ -728,3 +728,72 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('⚡ LabSync Pro v2.0 initialized.');
 });
+
+// ═══════════════════════════════════════════════════
+// MOBILE NAVIGATION SYSTEM
+// ═══════════════════════════════════════════════════
+
+function mobileNavSwitch(moduleName) {
+    // Switch the actual module
+    switchModule(moduleName);
+
+    // Update bottom nav active state
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.module === moduleName) {
+            item.classList.add('active');
+        }
+    });
+
+    // For test modules (semen, labtests, dnatests), activate "Testler" tab
+    const testModules = ['semen', 'labtests', 'dnatests'];
+    if (testModules.includes(moduleName)) {
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.dataset.module === 'semen') item.classList.add('active');
+        });
+    }
+
+    // For ivf, reports, qrscanner — activate "Diğer" tab
+    const moreModules = ['ivf', 'reports', 'qrscanner'];
+    if (moreModules.includes(moduleName)) {
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.dataset.module === 'more') item.classList.add('active');
+        });
+    }
+}
+
+// ─── Quick Action Sheet ───
+function openMobileQuickAction() {
+    const sheet = document.getElementById('mobileActionSheet');
+    if (sheet) {
+        sheet.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileActionSheet() {
+    const sheet = document.getElementById('mobileActionSheet');
+    if (sheet) {
+        sheet.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+
+// ─── More Menu ───
+function toggleMobileMore() {
+    const menu = document.getElementById('mobileMoreMenu');
+    if (menu) {
+        menu.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileMore() {
+    const menu = document.getElementById('mobileMoreMenu');
+    if (menu) {
+        menu.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
