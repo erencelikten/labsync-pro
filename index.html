@@ -162,6 +162,41 @@
                 </div>
                 <!-- Mobile Header Dropdown -->
                 <div class="mobile-header-dropdown" id="mobileHeaderDropdown">
+                    <div class="mhd-section-title">Sayfalar</div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('dashboard')">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('patients')">
+                        <i class="fas fa-users"></i>
+                        <span>Hastalar</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('semen')">
+                        <i class="fas fa-vial"></i>
+                        <span>Semen Analizi</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('ivf')">
+                        <i class="fas fa-baby"></i>
+                        <span>IVF / Embriyoloji</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('labtests')">
+                        <i class="fas fa-flask"></i>
+                        <span>Genel Lab Testleri</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('dnatests')">
+                        <i class="fas fa-dna"></i>
+                        <span>DNA / Genetik</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('reports')">
+                        <i class="fas fa-file-medical-alt"></i>
+                        <span>Raporlar</span>
+                    </div>
+                    <div class="mhd-item" onclick="closeMobileHeaderMenu(); switchModule('qrscanner')">
+                        <i class="fas fa-qrcode"></i>
+                        <span>QR Tarayıcı</span>
+                    </div>
+                    <div class="mhd-divider"></div>
+                    <div class="mhd-section-title">Araçlar</div>
                     <div class="mhd-item" onclick="closeMobileHeaderMenu(); document.getElementById('mobileSearchOverlay').classList.add('open')">
                         <i class="fas fa-search"></i>
                         <span>Hasta Ara</span>
@@ -1154,104 +1189,9 @@
         </div>
     </div>
 
-    <!-- ═══ MOBILE BOTTOM NAVIGATION ═══ -->
-    <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <div class="bottom-nav-item active" data-module="dashboard" onclick="mobileNavSwitch('dashboard')">
-            <div class="bottom-nav-icon"><i class="fas fa-chart-line"></i></div>
-            <span>Dashboard</span>
-        </div>
-        <div class="bottom-nav-item" data-module="patients" onclick="mobileNavSwitch('patients')">
-            <div class="bottom-nav-icon"><i class="fas fa-users"></i></div>
-            <span>Hastalar</span>
-        </div>
-        <div class="bottom-nav-fab" onclick="openMobileQuickAction()">
-            <div class="fab-btn">
-                <i class="fas fa-plus"></i>
-            </div>
-        </div>
-        <div class="bottom-nav-item" data-module="semen" onclick="mobileNavSwitch('semen')">
-            <div class="bottom-nav-icon"><i class="fas fa-vial"></i></div>
-            <span>Testler</span>
-        </div>
-        <div class="bottom-nav-item" data-module="more" onclick="toggleMobileMore()">
-            <div class="bottom-nav-icon"><i class="fas fa-ellipsis-h"></i></div>
-            <span>Diğer</span>
-        </div>
-    </nav>
-
-    <!-- Mobile Quick Action Sheet -->
-    <div class="mobile-action-sheet" id="mobileActionSheet">
-        <div class="action-sheet-overlay" onclick="closeMobileActionSheet()"></div>
-        <div class="action-sheet-content">
-            <div class="action-sheet-handle"></div>
-            <div class="action-sheet-title">Hızlı İşlem</div>
-            <div class="action-sheet-grid">
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); openPatientModal()">
-                    <div class="action-icon" style="background: var(--accent-dim); color: var(--neon-blue);">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <span>Yeni Hasta</span>
-                </div>
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); openSemenModal()">
-                    <div class="action-icon" style="background: var(--success-dim); color: var(--neon-green);">
-                        <i class="fas fa-vial"></i>
-                    </div>
-                    <span>Semen Analizi</span>
-                </div>
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); openIVFModal()">
-                    <div class="action-icon" style="background: rgba(168,85,247,0.12); color: var(--neon-purple);">
-                        <i class="fas fa-baby"></i>
-                    </div>
-                    <span>IVF Kaydı</span>
-                </div>
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); openLabTestModal()">
-                    <div class="action-icon" style="background: var(--warning-dim); color: var(--neon-orange);">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <span>Lab Testi</span>
-                </div>
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); openDNATestModal()">
-                    <div class="action-icon" style="background: var(--danger-dim); color: var(--neon-pink);">
-                        <i class="fas fa-dna"></i>
-                    </div>
-                    <span>DNA Testi</span>
-                </div>
-                <div class="action-sheet-item" onclick="closeMobileActionSheet(); switchModule('qrscanner')">
-                    <div class="action-icon" style="background: rgba(99,102,241,0.12); color: var(--info);">
-                        <i class="fas fa-qrcode"></i>
-                    </div>
-                    <span>QR Tarayıcı</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile "More" Menu -->
-    <div class="mobile-more-menu" id="mobileMoreMenu">
-        <div class="more-menu-overlay" onclick="closeMobileMore()"></div>
-        <div class="more-menu-content">
-            <div class="action-sheet-handle"></div>
-            <div class="more-menu-item" onclick="closeMobileMore(); mobileNavSwitch('ivf')">
-                <i class="fas fa-baby" style="color: var(--neon-purple);"></i>
-                <span>IVF / Embriyoloji</span>
-            </div>
-            <div class="more-menu-item" onclick="closeMobileMore(); mobileNavSwitch('labtests')">
-                <i class="fas fa-flask" style="color: var(--neon-orange);"></i>
-                <span>Genel Lab Testleri</span>
-            </div>
-            <div class="more-menu-item" onclick="closeMobileMore(); mobileNavSwitch('dnatests')">
-                <i class="fas fa-dna" style="color: var(--neon-pink);"></i>
-                <span>DNA / Genetik</span>
-            </div>
-            <div class="more-menu-item" onclick="closeMobileMore(); mobileNavSwitch('reports')">
-                <i class="fas fa-file-medical-alt" style="color: var(--neon-green);"></i>
-                <span>Raporlar</span>
-            </div>
-            <div class="more-menu-item" onclick="closeMobileMore(); mobileNavSwitch('qrscanner')">
-                <i class="fas fa-qrcode" style="color: var(--info);"></i>
-                <span>QR Tarayıcı</span>
-            </div>
-        </div>
+    <!-- ═══ MOBILE FLOATING FAB (standalone) ═══ -->
+    <div class="mobile-fab-standalone" id="mobileFab" onclick="openMobileQuickAction()">
+        <i class="fas fa-plus"></i>
     </div>
 
     <!-- Mobile Search Overlay -->

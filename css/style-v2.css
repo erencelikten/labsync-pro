@@ -1372,7 +1372,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
     /* ─── Page Content: Adjusted for bottom nav ─── */
     .page-content {
-        padding: 16px 14px 100px 14px;
+        padding: 16px 14px 24px 14px;
     }
 
     /* ─── Stats Row: Horizontal Scroll Carousel ─── */
@@ -1524,6 +1524,14 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 /* ═══ MOBILE HEADER HAMBURGER ═══ */
 .mobile-hamburger { display: none; }
 .desktop-only { display: inline-flex; }
+.mhd-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 14px 4px;
+}
 
 @media (max-width: 768px) {
     .desktop-only { display: none !important; }
@@ -1640,87 +1648,49 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     cursor: pointer;
 }
 
-/* ═══ MOBILE BOTTOM NAVIGATION ═══ */
-.mobile-bottom-nav {
+/* ═══ STANDALONE FLOATING FAB ═══ */
+.mobile-fab-standalone {
     display: none;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 24px;
+    right: 20px;
     z-index: 300;
-    background: rgba(8, 12, 24, 0.92);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border-top: 1px solid rgba(0, 212, 255, 0.1);
-    padding: 6px 8px;
-    padding-bottom: max(6px, env(safe-area-inset-bottom));
-    align-items: center;
-    justify-content: space-around;
-    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
-}
-
-@media (max-width: 768px) {
-    .mobile-bottom-nav { display: flex; }
-}
-
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-    min-width: 56px;
-}
-.bottom-nav-item span {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: color 0.3s ease;
-}
-.bottom-nav-icon {
-    font-size: 18px;
-    color: var(--text-muted);
-    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-    position: relative;
-}
-.bottom-nav-item.active .bottom-nav-icon {
-    color: var(--neon-blue);
-    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
-    transform: scale(1.1);
-}
-.bottom-nav-item.active span {
-    color: var(--neon-blue);
-}
-.bottom-nav-item.active::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 3px;
-    background: var(--neon-blue);
-    border-radius: 0 0 3px 3px;
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-}
-.bottom-nav-item:active {
-    transform: scale(0.9);
-}
-
-/* ─── Floating Action Button ─── */
-.bottom-nav-fab {
-    display: flex;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--neon-blue), #0088cc);
     align-items: center;
     justify-content: center;
-    margin-top: -28px;
+    font-size: 22px;
+    color: #fff;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    box-shadow:
+        0 4px 20px rgba(0, 212, 255, 0.4),
+        0 0 30px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
+@media (max-width: 768px) {
+    .mobile-fab-standalone { display: flex; }
+}
+.mobile-fab-standalone::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), transparent);
+    z-index: -1;
+    animation: fabPulse 2s ease-in-out infinite;
+}
+.mobile-fab-standalone:active {
+    transform: scale(0.9) rotate(45deg);
+}
+
+/* Hide old bottom nav elements */
+.mobile-bottom-nav { display: none !important; }
+.bottom-nav-item, .bottom-nav-fab, .bottom-nav-icon { display: none; }
+
 .fab-btn {
     width: 52px;
     height: 52px;
