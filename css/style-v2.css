@@ -116,6 +116,14 @@ body::after {
     opacity: 0.6;
     transition: opacity 1.5s ease;
 }
+
+/* Rotate video 90° on mobile portrait so horizontal DNA fills vertical screen */
+@media (max-width: 768px) and (orientation: portrait) {
+    .video-bg {
+        transform: rotate(90deg) scale(1.8);
+        transform-origin: center center;
+    }
+}
 .video-bg-overlay {
     position: absolute;
     inset: 0;
