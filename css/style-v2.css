@@ -120,7 +120,7 @@ body::after {
 /* Rotate video 90° on mobile portrait so horizontal DNA fills vertical screen */
 @media (max-width: 768px) and (orientation: portrait) {
     .video-bg {
-        transform: rotate(90deg) scale(1.8);
+        transform: rotate(90deg) scale(1.2);
         transform-origin: center center;
     }
 }
