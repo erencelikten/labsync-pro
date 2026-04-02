@@ -172,6 +172,10 @@ function switchModule(moduleName) {
         target.offsetHeight;
         target.style.animation = '';
     }
+    // Scroll to top on page switch
+    const pc = document.querySelector('.page-content');
+    if (pc) pc.scrollTop = 0;
+    window.scrollTo(0, 0);
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.querySelectorAll(`.nav-item[data-module="${moduleName}"]`).forEach(n => n.classList.add('active'));
 
