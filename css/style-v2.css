@@ -96,7 +96,7 @@ body::after {
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    background: var(--bg-deep); /* Fallback */
+    background: #000000; /* Pure black, absolutely no blue tint */
 }
 
 .video-bg {
@@ -107,15 +107,15 @@ body::after {
     width: 100vw;
     height: 100dvh;
     object-fit: cover;
-    opacity: 0.15; /* Soft, subdued premium clinical blend */
-    filter: saturate(1.5) contrast(1.2);
+    opacity: 0.6; /* Let the video clearly show without dimming it too much into black */
+    filter: saturate(1.2) contrast(1.1);
     will-change: transform;
 }
 
 .video-bg-overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, transparent 30%, rgba(6, 10, 20, 0.8) 100%);
+    background: transparent; /* No overlays, raw video only */
     pointer-events: none;
 }
 
