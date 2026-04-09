@@ -682,6 +682,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const f = parseFloat(ivfFert.value) || 0;
             const rateEl = document.getElementById('ivfFertRate');
             if (m > 0) rateEl.value = Math.round((f / m) * 100);
+            else rateEl.value = '';
         };
         ivfMature.addEventListener('input', calcRate);
         ivfFert.addEventListener('input', calcRate);
@@ -696,6 +697,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const np = parseFloat(nonProgMot.value) || 0;
             const totalEl = document.getElementById('semenTotalMotility');
             const immEl = document.getElementById('semenImmotile');
+            if (progMot.value === '' && nonProgMot.value === '') {
+                if (totalEl) totalEl.value = '';
+                if (immEl) immEl.value = '';
+                return;
+            }
             if (totalEl) totalEl.value = p + np;
             if (immEl) immEl.value = Math.max(0, 100 - p - np);
         };
@@ -711,23 +717,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const v = parseFloat(volEl.value) || 0;
             const c = parseFloat(concEl.value) || 0;
             const totalEl = document.getElementById('semenTotalCount');
+            if (volEl.value === '' || concEl.value === '') {
+                if (totalEl) totalEl.value = '';
+                return;
+            }
             if (totalEl) totalEl.value = (v * c).toFixed(1);
         };
         volEl.addEventListener('input', calcTotal);
         concEl.addEventListener('input', calcTotal);
-    }
-
-    // Header auto-hide on scroll
-    const pageContent = document.querySelector('.page-content');
-    const topHeader = document.querySelector('.top-header');
-    if (pageContent && topHeader) {
-        pageContent.addEventListener('scroll', () => {
-            if (pageContent.scrollTop > 60) {
-                topHeader.classList.add('header-hidden');
-            } else {
-                topHeader.classList.remove('header-hidden');
-            }
-        }, { passive: true });
     }
 
     console.log('⚡ LabSync Pro v2.0 initialized.');

@@ -3,7 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#060a14">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/biyosera_logo.png">
     <title>LabSync Pro — Prof. Dr. Denizhan Özgün | Laboratuvar Yönetim Sistemi</title>
     <meta name="description"
         content="Profesyonel laboratuvar yönetim sistemi. Semen analizi, IVF embriyoloji, genel lab testleri ve DNA testleri.">
@@ -14,39 +19,15 @@
 </head>
 
 <body>
-    <!-- Background Video — Seamless Crossfade Loop -->
-    <div class="video-bg-container">
-        <video class="video-bg video-bg-a" autoplay muted playsinline id="bgVideoA">
-            <source src="assets/bg-video.mp4" type="video/mp4">
-        </video>
-        <video class="video-bg video-bg-b" autoplay muted playsinline id="bgVideoB" style="opacity:0">
-            <source src="assets/bg-video.mp4" type="video/mp4">
-        </video>
-        <div class="video-bg-overlay"></div>
+
+
+    <!-- Premium Background Shapes -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
     </div>
-    <script>
-    (function(){
-        const vA = document.getElementById('bgVideoA');
-        const vB = document.getElementById('bgVideoB');
-        if(!vA || !vB) return;
-        const FADE = 1.5; // crossfade seconds
-        let active = vA, standby = vB;
-        function swap(){ [active, standby] = [standby, active]; }
-        function onTimeUpdate(){
-            const remaining = active.duration - active.currentTime;
-            if(remaining <= FADE && standby.style.opacity === '0'){
-                standby.currentTime = 0;
-                standby.play();
-                standby.style.opacity = '1';
-                active.style.opacity = '0';
-                setTimeout(()=>{ active.pause(); swap(); }, FADE * 1000);
-            }
-        }
-        vA.addEventListener('timeupdate', onTimeUpdate);
-        vB.addEventListener('timeupdate', onTimeUpdate);
-        vA.play().catch(()=>{});
-    })();
-    </script>
 
     <!-- Particles Background -->
     <div class="particles-container" id="particlesContainer"></div>
@@ -1217,7 +1198,16 @@
         // Function aliases for HTML onchange compatibility
         function loadLabParameters() { if (typeof loadLabTestParameters === 'function') loadLabTestParameters(); }
         function loadDNAParameters() { if (typeof loadDNATestParameters === 'function') loadDNATestParameters(); }
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    console.log('SW registered!', reg);
+                }).catch(err => {
+                    console.log('SW registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
-
 </html>

@@ -9,7 +9,7 @@
     --bg-deep: #060a14;
     --bg-primary: #0a0e1a;
     --bg-secondary: #0f1628;
-    --bg-card: rgba(15, 22, 40, 0.25);
+    --bg-card: rgba(15, 22, 40, 0.15); /* More transparent to allow background blur to shine */
     --bg-card-hover: rgba(20, 30, 55, 0.35);
     --bg-glass: rgba(10, 14, 26, 0.2);
     --bg-input: rgba(15, 22, 40, 0.35);
@@ -60,30 +60,76 @@ body {
     background: var(--bg-deep);
     color: var(--text-primary);
     overflow: hidden;
-    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
     line-height: 1.5;
+    overscroll-behavior: none;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    display: flex;
+    flex-direction: column;
 }
 input, select, textarea, button { font-family: inherit; }
 a { color: var(--accent); text-decoration: none; }
 table { width: 100%; border-collapse: collapse; }
 
-/* ─── Animated Background ─── */
-body::before {
-    content: '';
+/* ─── Animated Background Shapes ─── */
+.bg-shapes {
     position: fixed;
-    inset: 0;
-    background: 
-        radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.04) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
-        radial-gradient(ellipse at 50% 80%, rgba(0, 255, 136, 0.02) 0%, transparent 60%);
+    top: 0; left: 0; right: 0; bottom: 0;
     z-index: 0;
+    overflow: hidden;
     pointer-events: none;
-    animation: bgPulse 12s ease-in-out infinite alternate;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
-@keyframes bgPulse {
-    0% { opacity: 0.6; }
-    100% { opacity: 1; }
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.95; /* Pure vibrance */
+    animation: floatShape 25s infinite ease-in-out alternate;
+    will-change: transform;
+}
+
+.shape-1 {
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.7) 0%, rgba(0, 212, 255, 0) 70%);
+    top: -200px; left: -200px;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0) 70%);
+    bottom: -300px; right: -300px;
+    animation-delay: -5s;
+    animation-duration: 30s;
+}
+
+.shape-3 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.5) 0%, rgba(0, 255, 136, 0) 70%);
+    top: 30%; left: 40%;
+    animation-delay: -10s;
+    animation-duration: 20s;
+}
+
+.shape-4 {
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(255, 51, 102, 0.45) 0%, rgba(255, 51, 102, 0) 70%);
+    bottom: 10%; left: -200px;
+    animation-delay: -15s;
+    animation-duration: 35s;
+}
+
+@keyframes floatShape {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(100px, -50px) scale(1.1) rotate(45deg); }
+    66% { transform: translate(-50px, 80px) scale(0.9) rotate(-30deg); }
+    100% { transform: translate(80px, 100px) scale(1.2) rotate(60deg); }
 }
 
 /* Grid overlay */
@@ -111,19 +157,13 @@ body::after {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     object-fit: cover;
     opacity: 0.6;
     transition: opacity 1.5s ease;
 }
 
-/* Rotate video 90° on mobile portrait so horizontal DNA fills vertical screen */
-@media (max-width: 768px) and (orientation: portrait) {
-    .video-bg {
-        transform: rotate(90deg) scale(1);
-        transform-origin: center center;
-    }
-}
+
 .video-bg-overlay {
     position: absolute;
     inset: 0;
@@ -158,15 +198,17 @@ body::after {
 /* ─── App Layout ─── */
 .app-wrapper {
     display: flex;
-    height: 100vh;
+    flex: 1;
+    width: 100%;
     position: relative;
     z-index: 1;
+    overflow: hidden;
 }
 
 /* ─── Sidebar ─── */
 .sidebar {
     width: var(--sidebar-width);
-    height: 100vh;
+    height: 100dvh;
     background: rgba(8, 12, 24, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
@@ -325,8 +367,9 @@ body::after {
     margin-left: var(--sidebar-width);
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
+    position: relative;
 }
 
 /* ─── Top Header ─── */
@@ -341,10 +384,9 @@ body::after {
     justify-content: space-between;
     padding: 0 24px;
     flex-shrink: 0;
-    transition: transform var(--transition-med), opacity var(--transition-med);
+    transition: all var(--transition-med);
     z-index: 50;
 }
-.top-header.header-hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
 .header-left { display: flex; align-items: center; gap: 16px; }
 .header-title {
     font-size: 18px;
@@ -456,9 +498,9 @@ body::after {
 
 /* ─── Cards ─── */
 .card {
-    background: rgba(15, 22, 40, 0.20);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -504,9 +546,9 @@ body::after {
     gap: 16px;
 }
 .stat-card {
-    background: rgba(15, 22, 40, 0.20);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 20px;
@@ -1178,7 +1220,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
 /* ═══ PORTAL STYLES ═══ */
 .portal-wrapper {
-    min-height: 100vh;
+    min-height: 100dvh;
     background: var(--bg-deep);
     position: relative;
     z-index: 1;
@@ -1191,7 +1233,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 140px);
+    min-height: calc(100dvh - 140px);
     padding: 20px;
 }
 .portal-login-card {
@@ -1349,7 +1391,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     }
     .sidebar.open { transform: translateX(0); }
     .main-content { margin-left: 0; }
-    .mobile-menu-btn { display: none; }
+    .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
     /* ─── Top Header: Compact Mobile ─── */
     .top-header {
@@ -1375,9 +1417,9 @@ textarea.form-control { resize: vertical; min-height: 60px; }
         border-radius: 10px;
     }
 
-    /* ─── Page Content: Adjusted for bottom nav ─── */
+    /* ─── Page Content: Adjusted for mobile spacing ─── */
     .page-content {
-        padding: 16px 14px 24px 14px;
+        padding: 16px 14px 40px 14px;
     }
 
     /* ─── Stats Row: Horizontal Scroll Carousel ─── */
@@ -1464,14 +1506,16 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     /* ─── Modal: Full Screen Mobile ─── */
     .modal-overlay {
         align-items: flex-end;
+        padding: 16px;
     }
     .modal {
-        max-height: 92vh;
-        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-        margin: 0;
+        max-height: calc(100dvh - env(safe-area-inset-bottom) - 32px);
+        border-radius: var(--radius-xl);
+        margin-bottom: env(safe-area-inset-bottom);
         width: 100% !important;
         max-width: 100% !important;
         animation: modalSlideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(0, 212, 255, 0.15); /* Premium shadow */
     }
     .modal-header {
         padding: 20px 20px 14px;
@@ -1617,7 +1661,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     background: rgba(6, 10, 20, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    padding: 20px 16px;
+    padding: calc(env(safe-area-inset-top, 20px) + 20px) 16px 20px;
     animation: fadeIn 0.2s ease;
 }
 .mobile-search-overlay.open { display: flex; flex-direction: column; }

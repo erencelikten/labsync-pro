@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Biyosera | Matbaa Çıktısı Jeneratörü V5</title>
+    <!-- Görüntüyü İndirmek için -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- QR Kod Oluşturmak için -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .header-info { text-align: center; margin-bottom: 30px; }
+        .header-info h1 { font-family: 'Inter', sans-serif; margin: 0; font-weight: 400; letter-spacing: 2px; }
+        .header-info p { color: #888; font-size: 14px; margin-top: 5px; }
+        .controls { margin-bottom: 40px; }
+
+        .btn {
+            background-color: #c0c5cc; color: #111; border: none; padding: 15px 30px;
+            font-size: 15px; font-weight: 600; letter-spacing: 1px; border-radius: 4px;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(192, 197, 204, 0.2); transition: all 0.3s;
+        }
+        .btn:hover { background-color: #e2e8f0; transform: translateY(-2px); }
+
+        .card-wrapper { display: flex; gap: 50px; flex-wrap: wrap; justify-content: center; }
+
+        .print-card {
+            width: 1050px; height: 680px; box-sizing: border-box; position: relative;
+            overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- ÖN YÜZ (SİYAH) --- */
+        #cardFront {
+            background-color: #0d0f12; padding: 0 80px;
+        }
+
+        /* YENİ: ÜST MERKEZ MİNİ LOGO (Cüzdan Cebi İçin) */
+        .front-small-logo {
+            position: absolute;
+            top: 35px; /* Cüzdandan taştığında net görünmesi için en üst sınıra çekildi (Matbaa kesim payı korundu) */
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 160px; /* Zarafet için boyut çok ufak kısıldı */
+            filter: brightness(0) invert(1);
+            opacity: 0.95;
+        }
+
+        /* İsmin kusursuz merkezi konumu */
+        .name-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Inter', sans-serif; color: #ffffff; font-size: 55px; font-weight: 600;
+            letter-spacing: 8px; text-transform: uppercase; width: 100%; text-align: center;
+        }
+
+        /* Numaralar ve Adresin tabana çakılı konumu */
+        .contact-block {
+            position: absolute; bottom: 60px; left: 0; display: flex; flex-direction: column;
+            align-items: center; gap: 14px; width: 100%;
+        }
+
+        .contact-item {
+            color: #949ba3; font-size: 21px; font-weight: 300; letter-spacing: 3px;
+            text-align: center; line-height: 1.6;
+        }
+        .contact-item strong { color: #ffffff; font-weight: 400; letter-spacing: 4px; }
+        .address-item { font-size: 17px; max-width: 700px; letter-spacing: 1.5px; margin-top: 10px; color: #79838c; }
+
+        /* --- ARKA YÜZ (BEYAZ, LOGO + QR) --- */
+        #cardBack { background-color: #ffffff; position: relative; }
+        
+        .logo-img { 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 550px; 
+            display: block;
+        }
+
+        /* QR KOD ALANI (Arka Yüz Merkezi Alt) */
+        .qr-wrapper {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffffff;
+            padding: 8px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-info">
+        <h1>BİYOSERA MATBAA KONSEPTİ V5</h1>
+        <p>Sol Üst Mini Logo Eklendi / Boşluk Hizalamaları Tamamlandı.</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="exportCards()">YÜKSEK ÇÖZÜNÜRLÜKLÜ PNG OLARAK İNDİR</button>
+    </div>
+
+    <div class="card-wrapper">
+        <!-- ÖN YÜZ -->
+        <div class="print-card" id="cardFront">
+            <img src="assets/biyosera_logo_hz.png" class="front-small-logo" onerror="this.src='https://lab-system-pi.vercel.app/assets/biyosera_logo_hz.png'">
+            <div class="name-text">EREN ÇELİKTEN</div>
+            
+            <div class="contact-block">
+                <div class="contact-item"><strong>0532 613 41 23</strong></div>
+                <div class="contact-item">eren.celikten@biyosera.com</div>
+                <div class="contact-item">www.biyosera.com.tr</div>
+                <div class="contact-item address-item" id="editableAddress" contenteditable="true">
+                    Merkez Ankara, Emniyet, Hipodrom Cd.<br>m1 blok 24. kat, 06560 Yenimahalle / Ankara
+                </div>
+            </div>
+        </div>
+
+        <!-- ARKA YÜZ -->
+        <div class="print-card" id="cardBack">
+            <img src="assets/biyosera_logo_hz.png" class="logo-img" onerror="this.src='https://lab-system-pi.vercel.app/assets/biyosera_logo_hz.png'">
+            
+            <!-- QR Kod Buraya JS ile Otomatik Çizilecek -->
+            <div class="qr-wrapper" id="qrContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa yüklenince QR Kodu arka yüze oluştur
+        window.addEventListener('DOMContentLoaded', () => {
+            new QRCode(document.getElementById("qrContainer"), {
+                text: "https://www.biyosera.com.tr/profil",
+                width: 140,  
+                height: 140,
+                colorDark : "#111111", 
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H 
+            });
+        });
+
+        // Çıktı Alma Fonksiyonu
+        async function exportCards() {
+            const btn = document.querySelector('.btn');
+            btn.innerText = "OLUŞTURULUYOR LÜTFEN BEKLEYİN...";
+            
+            // Front Card Export
+            const canvasFront = await html2canvas(document.getElementById('cardFront'), { scale: 2 });
+            const linkFront = document.createElement('a');
+            linkFront.download = 'biyosera_kartvizit_on_v5.png';
+            linkFront.href = canvasFront.toDataURL('image/png');
+            linkFront.click();
+
+            // Back Card Export
+            const canvasBack = await html2canvas(document.getElementById('cardBack'), { scale: 2 });
+            const linkBack = document.createElement('a');
+            linkBack.download = 'biyosera_kartvizit_arka_v5.png';
+            linkBack.href = canvasBack.toDataURL('image/png');
+            linkBack.click();
+
+            btn.innerText = "BAŞARIYLA İNDİRİLDİ!";
+            setTimeout(() => {
+                btn.innerText = "YÜKSEK ÇÖZÜNÜRLÜKLÜ PNG OLARAK İNDİR";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

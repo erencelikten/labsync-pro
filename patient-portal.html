@@ -2,12 +2,14 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LabSync Pro — Hasta Portalı</title>
     <meta name="description" content="Lab test sonuçlarınızı görüntüleyin.">
     <meta name="theme-color" content="#060a14">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/biyosera_logo.png">
     <link rel="stylesheet" href="css/style-v2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -325,6 +327,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-client.js"></script>
+    <script src="js/seed-data.js"></script>
     <script>
         // ═══ Particles ═══
         function initParticles() {
@@ -351,7 +354,7 @@
         async function getDB() {
             if (window.loadFromSupabase) {
                 const cloudDB = await window.loadFromSupabase();
-                if (cloudDB) return cloudDB;
+                if (cloudDB && cloudDB.patients && cloudDB.patients.length > 0) return cloudDB;
             }
             return {
                 patients: JSON.parse(localStorage.getItem('labsync_patients') || '[]'),
@@ -371,13 +374,32 @@
             document.getElementById('portalError').style.display = 'none';
         }
 
+        // ═══ Text Normalizer ═══
+        function normalizeStr(str) {
+            if (!str) return '';
+            return str.toLocaleLowerCase('tr-TR')
+                .replace(/i̇/g, 'i').replace(/ı/g, 'i')
+                .replace(/ö/g, 'o').replace(/ü/g, 'u')
+                .replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ç/g, 'c')
+                .replace(/\s+/g, '');
+        }
+
         // ═══ Login ═══
         async function portalLogin() {
-            const tc = document.getElementById('portalTC').value.trim();
-            const name = document.getElementById('portalName').value.trim().toLowerCase();
-            if (!tc || !name) { showPortalError('Lütfen TC ve Ad Soyad alanlarını doldurun.'); return; }
+            const rawTc = document.getElementById('portalTC').value;
+            const rawName = document.getElementById('portalName').value;
+            const tc = rawTc.replace(/\s+/g, '');
+            const nameSearch = normalizeStr(rawName);
+            
+            if (!tc || !nameSearch) { showPortalError('Lütfen TC ve Ad Soyad alanlarını doldurun.'); return; }
+            
             const db = await getDB();
-            const patient = db.patients.find(p => p.tc === tc && (`${p.firstName} ${p.lastName}`).toLowerCase().includes(name));
+            const patient = db.patients.find(p => {
+                const pTc = (p.tc || '').replace(/\s+/g, '');
+                const pName = normalizeStr(`${p.firstName} ${p.lastName}`);
+                return pTc === tc && pName.includes(nameSearch);
+            });
+            
             if (patient) { showPatientResults(patient); } 
             else { showPortalError('Eşleşen hasta bulunamadı. Bilgilerinizi kontrol edin.'); }
         }
@@ -815,6 +837,12 @@
         });
 
         document.addEventListener('DOMContentLoaded', checkURLLogin);
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
     </script>
 </body>
 </html>

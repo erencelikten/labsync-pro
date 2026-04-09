@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eren Çelikten | Biyosera</title>
+    <!-- FontAwesome for standard icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0c10;
+            --accent: #00d4ff;
+            --card-glass: rgba(25, 28, 35, 0.6);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-sub: #818a91;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1; /* For background stacking */
+        }
+
+        /* Animated Background Shapes */
+        .bg-shapes {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 400px; height: 400px;
+            background: rgba(0, 212, 255, 0.15);
+            top: -100px; left: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 500px; height: 500px;
+            background: rgba(168, 85, 247, 0.12); /* Subtle purple edge */
+            bottom: -200px; right: -150px;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 300px; height: 300px;
+            background: rgba(0, 255, 136, 0.08); /* Mint green touch */
+            top: 40%; left: 60%;
+            animation-delay: -10s;
+            animation-duration: 25s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+            33% { transform: translateY(-30px) scale(1.1) rotate(5deg); }
+            66% { transform: translateY(20px) scale(0.9) rotate(-5deg); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-area {
+            margin-bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo-img {
+            max-width: 180px;
+            /* Beyaz arka planlı logonun ters renk filtresi */
+            filter: brightness(0) invert(1); 
+            opacity: 0.9;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+
+        .title {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .links-grid {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .link-card {
+            background: rgba(15, 18, 25, 0.35); /* More transparent to see the blur */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-main);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px); /* For iOS/Safari */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Drop shadow to lift the card */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover, .link-card:active {
+            transform: translateY(-2px);
+            background: rgba(35, 40, 50, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-card.primary:hover::before { background-color: var(--accent); }
+        .link-card.whatsapp:hover::before { background-color: #25D366; }
+        .link-card.map:hover::before { background-color: #EA4335; }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            font-size: 18px;
+            color: var(--accent);
+        }
+
+        .whatsapp .icon-box { color: #25D366; }
+        .map .icon-box { color: #EA4335; }
+        .mail .icon-box { color: #db4a39; }
+
+        .link-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-title {
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .link-sub {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: 300;
+        }
+
+        .vcard-btn {
+            margin-top: 40px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vcard-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 40px 0 20px;
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="logo-area">
+            <img src="assets/biyosera_logo_hz.png" class="logo-img" alt="Biyosera" onerror="this.src='https://lab-system-pi.vercel.app/assets/biyosera_logo_hz.png'">
+        </div>
+
+        <div class="profile-section">
+            <h1 class="name">Eren Çelikten</h1>
+        </div>
+
+        <div class="links-grid">
+            
+            <!-- Arama -->
+            <a href="tel:+905326134123" class="link-card primary">
+                <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+                <div class="link-text">
+                    <span class="link-title">Hemen Ara</span>
+                    <span class="link-sub">+90 532 613 41 23</span>
+                </div>
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://wa.me/905326134123?text=Merhaba%20Eren%20Bey," target="_blank" class="link-card whatsapp">
+                <div class="icon-box"><i class="fab fa-whatsapp" style="font-size: 22px;"></i></div>
+                <div class="link-text">
+                    <span class="link-title">WhatsApp Mesajı</span>
+                    <span class="link-sub">Doğrudan sohbete başla</span>
+                </div>
+            </a>
+
+            <!-- E-Posta -->
+            <a href="mailto:eren.celikten@biyosera.com" class="link-card mail">
+                <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                <div class="link-text">
+                    <span class="link-title">E-Posta Gönder</span>
+                    <span class="link-sub">eren.celikten@biyosera.com</span>
+                </div>
+            </a>
+
+            <!-- Lokasyon -->
+            <a href="https://maps.google.com/?q=Hipodrom+Cd.+Yenimahalle+Ankara" target="_blank" class="link-card map">
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="link-text">
+                    <span class="link-title">Ofis Konumu</span>
+                    <span class="link-sub">Yenimahalle / Ankara</span>
+                </div>
+            </a>
+
+            <!-- Web -->
+            <a href="https://www.biyosera.com.tr" target="_blank" class="link-card primary">
+                <div class="icon-box"><i class="fas fa-globe"></i></div>
+                <div class="link-text">
+                    <span class="link-title">Web Sitesi</span>
+                    <span class="link-sub">www.biyosera.com.tr</span>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Rehbere Ekle (vCard Generation Logic) -->
+        <button class="vcard-btn" onclick="downloadVCard()">
+            <i class="fas fa-address-book"></i> Rehbere Kaydet
+        </button>
+
+        <div class="footer">
+            Biyosera Medikal Sistemleri A.Ş.
+        </div>
+    </div>
+
+    <script>
+        function downloadVCard() {
+            var vcard = "BEGIN:VCARD\nVERSION:3.0\n" +
+                        "N:Çelikten;Eren;;;\n" +
+                        "FN:Eren Çelikten\n" +
+                        "ORG:Biyosera Medikal Sistemleri A.Ş.\n" +
+                        "TEL;TYPE=CELL:+905326134123\n" +
+                        "EMAIL:eren.celikten@biyosera.com\n" +
+                        "URL:https://www.biyosera.com.tr\n" +
+                        "END:VCARD";
+            
+            var blob = new Blob([vcard], { type: "text/vcard" });
+            var url = URL.createObjectURL(blob);
+            
+            const newLink = document.createElement('a');
+            newLink.download = "Eren_Celikten_Biyosera.vcf";
+            newLink.textContent = "Kaydet";
+            newLink.href = url;
+            
+            newLink.click();
+        }
+    </script>
+</body>
+</html>
