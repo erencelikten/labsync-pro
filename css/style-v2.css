@@ -89,40 +89,40 @@ table { width: 100%; border-collapse: collapse; }
 .shape {
     position: absolute;
     border-radius: 50%;
-    opacity: 0.95; /* Pure vibrance */
-    animation: floatShape 25s infinite ease-in-out alternate;
+    opacity: 0.8; /* Subtle yet powerful */
+    animation: floatShape 35s infinite ease-in-out alternate;
     will-change: transform;
 }
 
 .shape-1 {
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.7) 0%, rgba(0, 212, 255, 0) 70%);
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(10, 38, 71, 0.7) 0%, rgba(10, 38, 71, 0) 70%); /* Deep Biyosera Navy */
     top: -200px; left: -200px;
     animation-delay: 0s;
 }
 
 .shape-2 {
-    width: 900px; height: 900px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0) 70%);
+    width: 1000px; height: 1000px;
+    background: radial-gradient(circle, rgba(16, 55, 92, 0.6) 0%, rgba(16, 55, 92, 0) 70%); /* Steel Corporate Blue */
     bottom: -300px; right: -300px;
     animation-delay: -5s;
-    animation-duration: 30s;
+    animation-duration: 40s;
 }
 
 .shape-3 {
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(0, 255, 136, 0.5) 0%, rgba(0, 255, 136, 0) 70%);
-    top: 30%; left: 40%;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0) 70%); /* Clinical Cyan Highlight */
+    top: 20%; left: 30%;
     animation-delay: -10s;
-    animation-duration: 20s;
+    animation-duration: 25s;
 }
 
 .shape-4 {
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(255, 51, 102, 0.45) 0%, rgba(255, 51, 102, 0) 70%);
-    bottom: 10%; left: -200px;
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(20, 60, 100, 0.4) 0%, rgba(20, 60, 100, 0) 70%); /* Mid Navy */
+    bottom: 5%; left: -200px;
     animation-delay: -15s;
-    animation-duration: 35s;
+    animation-duration: 45s;
 }
 
 @keyframes floatShape {
