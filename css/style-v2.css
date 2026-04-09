@@ -75,62 +75,6 @@ input, select, textarea, button { font-family: inherit; }
 a { color: var(--accent); text-decoration: none; }
 table { width: 100%; border-collapse: collapse; }
 
-/* ─── Animated Background Shapes ─── */
-.bg-shapes {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.shape {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.8; /* Subtle yet powerful */
-    animation: floatShape 35s infinite ease-in-out alternate;
-    will-change: transform;
-}
-
-.shape-1 {
-    width: 900px; height: 900px;
-    background: radial-gradient(circle, rgba(10, 38, 71, 0.7) 0%, rgba(10, 38, 71, 0) 70%); /* Deep Biyosera Navy */
-    top: -200px; left: -200px;
-    animation-delay: 0s;
-}
-
-.shape-2 {
-    width: 1000px; height: 1000px;
-    background: radial-gradient(circle, rgba(16, 55, 92, 0.6) 0%, rgba(16, 55, 92, 0) 70%); /* Steel Corporate Blue */
-    bottom: -300px; right: -300px;
-    animation-delay: -5s;
-    animation-duration: 40s;
-}
-
-.shape-3 {
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0) 70%); /* Clinical Cyan Highlight */
-    top: 20%; left: 30%;
-    animation-delay: -10s;
-    animation-duration: 25s;
-}
-
-.shape-4 {
-    width: 900px; height: 900px;
-    background: radial-gradient(circle, rgba(20, 60, 100, 0.4) 0%, rgba(20, 60, 100, 0) 70%); /* Mid Navy */
-    bottom: 5%; left: -200px;
-    animation-delay: -15s;
-    animation-duration: 45s;
-}
-
-@keyframes floatShape {
-    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    33% { transform: translate(100px, -50px) scale(1.1) rotate(45deg); }
-    66% { transform: translate(-50px, 80px) scale(0.9) rotate(-30deg); }
-    100% { transform: translate(80px, 100px) scale(1.2) rotate(60deg); }
-}
 
 /* Grid overlay */
 body::after {
@@ -145,29 +89,33 @@ body::after {
     pointer-events: none;
 }
 
-/* ─── Background Video ─── */
+/* ─── Cinematic Video Background ─── */
 .video-bg-container {
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     overflow: hidden;
+    pointer-events: none;
+    background: var(--bg-deep); /* Fallback */
 }
+
 .video-bg {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100vw;
     height: 100dvh;
     object-fit: cover;
-    opacity: 0.6;
-    transition: opacity 1.5s ease;
+    opacity: 0.15; /* Soft, subdued premium clinical blend */
+    filter: saturate(1.5) contrast(1.2);
+    will-change: transform;
 }
-
 
 .video-bg-overlay {
     position: absolute;
     inset: 0;
-    background: transparent;
+    background: radial-gradient(circle at center, transparent 30%, rgba(6, 10, 20, 0.8) 100%);
     pointer-events: none;
 }
 
