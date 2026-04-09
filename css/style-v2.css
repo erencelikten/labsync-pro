@@ -64,8 +64,6 @@ body {
     width: 100vw;
     line-height: 1.5;
     overscroll-behavior: none;
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
     display: flex;
@@ -170,6 +168,8 @@ body::after {
     transition: transform var(--transition-med);
     overflow-y: auto;
     overflow-x: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 .sidebar::-webkit-scrollbar { width: 3px; }
 .sidebar::-webkit-scrollbar-track { background: transparent; }
@@ -322,7 +322,8 @@ body::after {
 
 /* ─── Top Header ─── */
 .top-header {
-    height: var(--header-height);
+    height: calc(var(--header-height) + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
     background: rgba(8, 12, 24, 0.20);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
@@ -330,7 +331,8 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px;
+    padding-left: 24px;
+    padding-right: 24px;
     flex-shrink: 0;
     transition: all var(--transition-med);
     z-index: 50;
@@ -1343,8 +1345,9 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
     /* ─── Top Header: Compact Mobile ─── */
     .top-header {
-        height: 56px;
-        padding: 0 16px;
+        height: auto;
+        min-height: calc(56px + env(safe-area-inset-top));
+        padding: env(safe-area-inset-top) 16px 0 16px;
         background: rgba(6, 10, 20, 0.85);
         backdrop-filter: blur(30px);
         -webkit-backdrop-filter: blur(30px);
@@ -1367,7 +1370,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
     /* ─── Page Content: Adjusted for mobile spacing ─── */
     .page-content {
-        padding: 16px 14px 40px 14px;
+        padding: 16px 14px calc(30px + env(safe-area-inset-bottom)) 14px;
     }
 
     /* ─── Stats Row: Horizontal Scroll Carousel ─── */
