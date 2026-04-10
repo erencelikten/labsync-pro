@@ -29,8 +29,8 @@
     --success-dim: rgba(0, 255, 136, 0.12);
     --warning: #ff8800;
     --warning-dim: rgba(255, 136, 0, 0.12);
-    --danger: #ff3366;
-    --danger-dim: rgba(255, 51, 102, 0.12);
+    --danger: #ff4757; /* Medical Red */
+    --danger-dim: rgba(255, 71, 87, 0.12);
     --info: #888888;
     --text-white: #e8ecf4;
     --text-primary: #c8d0e0;

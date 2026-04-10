@@ -257,18 +257,18 @@ function showPatientDetail(patientId) {
         ` : ''}
 
         ${ivfRecords.length > 0 ? `
-            <h4 style="color:#AB47BC;margin:12px 0 8px;font-size:13px;"><i class="fas fa-baby"></i> IVF Siklusları (${ivfRecords.length})</h4>
+            <h4 style="color:var(--text-white);margin:12px 0 8px;font-size:13px;"><i class="fas fa-baby"></i> IVF Siklusları (${ivfRecords.length})</h4>
             ${ivfRecords.map(t => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:6px;margin-bottom:6px;font-size:13px;">
-                <span style="font-family:'JetBrains Mono',monospace;color:#AB47BC;font-size:11px;">${t.id}</span>
+                <span style="font-family:'JetBrains Mono',monospace;color:var(--text-white);font-size:11px;">${t.id}</span>
                 <span>${formatDate(t.startDate)}</span>
                 <span class="badge badge-info">${t.status}</span>
             </div>`).join('')}
         ` : ''}
 
         ${labTests.length > 0 ? `
-            <h4 style="color:#2196F3;margin:12px 0 8px;font-size:13px;"><i class="fas fa-flask"></i> Lab Testleri (${labTests.length})</h4>
+            <h4 style="color:var(--text-white);margin:12px 0 8px;font-size:13px;"><i class="fas fa-flask"></i> Lab Testleri (${labTests.length})</h4>
             ${labTests.map(t => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:6px;margin-bottom:6px;font-size:13px;">
-                <span style="font-family:'JetBrains Mono',monospace;color:#2196F3;font-size:11px;">${t.id}</span>
+                <span style="font-family:'JetBrains Mono',monospace;color:var(--text-white);font-size:11px;">${t.id}</span>
                 <span>${t.testType}</span>
                 <span>${formatDate(t.date)}</span>
             </div>`).join('')}

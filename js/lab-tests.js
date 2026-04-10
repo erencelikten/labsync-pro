@@ -234,7 +234,7 @@ function refreshLabTestsTable() {
     }
 
     tbody.innerHTML = tests.map(t => `<tr>
-        <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#2196F3;">${t.id}</span></td>
+        <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-white);">${t.id}</span></td>
         <td><strong>${getPatientName(t.patientId)}</strong></td>
         <td><span class="badge badge-info">${t.testType}</span></td>
         <td>${formatDate(t.date)}</td>

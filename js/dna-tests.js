@@ -309,9 +309,9 @@ function refreshDNATestsTable() {
     }
 
     tbody.innerHTML = tests.map(t => `<tr>
-        <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#E040FB;">${t.id}</span></td>
+        <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-white);">${t.id}</span></td>
         <td><strong>${getPatientName(t.patientId)}</strong></td>
-        <td><span class="badge badge-info" style="background:rgba(224,64,251,0.15);color:#E040FB;">${t.testType}</span></td>
+        <td><span class="badge badge-info" style="background:rgba(255,255,255,0.06);color:var(--text-white);">${t.testType}</span></td>
         <td>${formatDate(t.date)}</td>
         <td>${t.parameterCount || '-'}</td>
         <td>${t.abnormalCount > 0 ? `<span class="badge badge-danger">${t.abnormalCount} anormal</span>` : '<span class="badge badge-success">Normal</span>'}</td>
@@ -345,7 +345,7 @@ function showDNATestDetail(testId) {
             <div class="stat-card" style="padding:16px;flex:1;">
                 <div class="stat-info">
                     <div class="stat-label">Test Tipi</div>
-                    <div style="font-size:14px;font-weight:700;color:#E040FB;">${t.testLabel}</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--text-white);">${t.testLabel}</div>
                 </div>
             </div>
             <div class="stat-card" style="padding:16px;flex:1;">

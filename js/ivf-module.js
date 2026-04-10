@@ -120,7 +120,7 @@ function refreshIVFTable() {
             'Freeze All': 'badge-warning',
         };
         return `<tr>
-            <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#AB47BC;">${r.id}</span></td>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-white);">${r.id}</span></td>
             <td><strong>${getPatientName(r.patientId)}</strong></td>
             <td>${formatDate(r.startDate)}</td>
             <td>${r.oocyteCount || '-'}</td>

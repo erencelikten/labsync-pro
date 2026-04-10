@@ -493,7 +493,7 @@ function renderTestDistChart() {
             labels: ['Semen Analizi', 'IVF', 'Lab Testleri', 'DNA / Genetik'],
             datasets: [{
                 data: [DB.semenTests.length, DB.ivfRecords.length, DB.labTests.length, DB.dnaTests.length],
-                backgroundColor: ['#00d4ff', '#a855f7', '#00ff88', '#ff3366'],
+                backgroundColor: ['#00d4ff', 'rgba(255,255,255,0.8)', '#00ff88', '#ff3366'],
                 borderWidth: 0,
                 borderRadius: 4,
                 spacing: 4,
@@ -554,10 +554,10 @@ function renderMonthlyTrendChart() {
                 {
                     label: 'Lab Testleri',
                     data: labByMonth,
-                    borderColor: '#a855f7',
+                    borderColor: 'rgba(255,255,255,0.8)',
                     backgroundColor: 'rgba(168, 85, 247, 0.08)',
                     fill: true, tension: 0.4, pointRadius: 4,
-                    pointBackgroundColor: '#a855f7',
+                    pointBackgroundColor: 'rgba(255,255,255,0.8)',
                     borderWidth: 2,
                 },
             ]
