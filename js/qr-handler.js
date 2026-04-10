@@ -19,8 +19,10 @@ function generatePatientQR() {
 
     const canvas = document.getElementById('qrCodeCanvas');
 
-    // QR data: URL that auto-logs in the patient on the portal
-    const portalURL = window.location.origin + window.location.pathname.replace('index.html', 'patient-portal.html') + '#patient=' + encodeURIComponent(patient.id);
+    // QR data: URL that links directly to the patient on the portal
+    const portalObj = new URL('patient-portal.html', window.location.href);
+    portalObj.hash = 'patient=' + encodeURIComponent(patient.id);
+    const portalURL = portalObj.href;
 
     if (qrCodeInstance) {
         qrCodeInstance.clear();
