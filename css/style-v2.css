@@ -55,12 +55,23 @@
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+@supports (-webkit-touch-callout: none) {
+    html, body {
+        height: -webkit-fill-available;
+    }
+}
+
 body {
     font-family: var(--font-sans);
     background: var(--bg-deep);
     color: var(--text-primary);
     overflow: hidden;
-    height: 100dvh;
     width: 100vw;
     line-height: 1.5;
     overscroll-behavior: none;
