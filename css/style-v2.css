@@ -158,9 +158,9 @@ body::after {
 .sidebar {
     width: var(--sidebar-width);
     height: 100dvh;
-    background: rgba(0, 0, 0, 0.3); /* Pure black glassmorphism */
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: rgba(0, 0, 0, 0.15); /* Significantly more transparent */
+    backdrop-filter: blur(15px); /* Let the video clearly show through */
+    -webkit-backdrop-filter: blur(15px);
     border-right: 1px solid var(--border-glass);
     display: flex;
     flex-direction: column;
@@ -1336,11 +1336,15 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 }
 
 @media (max-width: 768px) {
-    /* ─── Sidebar: Completely Hidden on Mobile ─── */
+    /* ─── Sidebar: Slide in from RIGHT on Mobile ─── */
     .sidebar {
-        transform: translateX(-100%);
+        transform: translateX(100%); /* Start off-screen right */
+        left: auto;
+        right: 0;
         width: 280px;
         z-index: 200;
+        border-right: none;
+        border-left: 1px solid var(--border-glass);
     }
     .sidebar.open { transform: translateX(0); }
     .main-content { margin-left: 0; }
@@ -1366,25 +1370,27 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     .header-date { display: none; }
     .header-right { gap: 12px; }
     
-    /* Elegant Circular Glass Buttons */
-    .header-btn, .mobile-menu-btn {
+    /* Transparent Minimal Hamburger (No Circles) */
+    .mobile-menu-btn {
         width: 44px;
         height: 44px;
-        font-size: 16px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        font-size: 22px; /* Bigger lines */
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end; /* Align right to the edge nicely */
     }
-    .mobile-menu-btn i, .header-btn i {
+    .mobile-menu-btn i {
         color: var(--text-white);
     }
 
     /* ─── Page Content: Adjusted for mobile spacing ─── */
     .page-content {
-        padding: 16px 14px calc(30px + env(safe-area-inset-bottom)) 14px;
+        padding: 16px 14px calc(16px + env(safe-area-inset-bottom)) 14px; /* Lowered bottom padding massively */
     }
 
     /* ─── Stats Row: Horizontal Scroll Carousel ─── */
