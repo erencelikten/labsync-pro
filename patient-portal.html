@@ -28,10 +28,10 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 700;
-            color: var(--neon-blue);
+            color: var(--text-white);
             letter-spacing: 3px;
             margin-top: 8px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         .portal-hero .app-sub {
             font-size: 11px;
@@ -48,7 +48,7 @@
             margin-bottom: 14px;
             padding: 0 4px;
         }
-        .vitals-header i { color: var(--neon-blue); font-size: 14px; }
+        .vitals-header i { color: var(--text-white); font-size: 14px; }
         .vitals-header span {
             font-size: 13px;
             font-weight: 700;
@@ -73,7 +73,7 @@
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green), var(--neon-purple));
+            background: linear-gradient(90deg, var(--text-white), var(--neon-green), var(--neon-purple));
         }
 
         /* SpO2-style Wave Effect */
@@ -121,7 +121,7 @@
             border-bottom: 1px solid var(--border-subtle);
             cursor: pointer;
         }
-        .test-result-header:active { background: rgba(0, 212, 255, 0.03); }
+        .test-result-header:active { background: rgba(255, 255, 255, 0.03); }
         .test-result-title {
             display: flex;
             align-items: center;
@@ -155,7 +155,7 @@
             top: 0;
             bottom: 0;
             width: 1px;
-            background: linear-gradient(to bottom, var(--neon-blue), transparent);
+            background: linear-gradient(to bottom, var(--text-white), transparent);
         }
         .portal-timeline-item {
             position: relative;
@@ -173,12 +173,12 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: var(--neon-blue);
-            box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+            background: var(--text-white);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
         }
         .portal-timeline-date {
             font-size: 11px;
-            color: var(--neon-blue);
+            color: var(--text-white);
             font-family: 'JetBrains Mono', mono;
             margin-bottom: 4px;
         }
@@ -195,7 +195,11 @@
     </style>
 </head>
 <body>
-    <div class="particles-container" id="particlesContainer"></div>
+    <div class="video-bg-container">
+        <video autoplay loop muted playsinline class="video-bg">
+            <source src="assets/bg-video-mobile.mp4" type="video/mp4">
+        </video>
+    </div>
     <div class="portal-wrapper">
         <!-- Hero -->
         <div class="portal-hero">
@@ -207,7 +211,7 @@
         <!-- Login Screen -->
         <div class="portal-login-container" id="portalLoginContainer">
             <div class="portal-login-card">
-                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;color:#fff;box-shadow:0 0 25px rgba(0,212,255,0.3);">
+                <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;color:#fff;box-shadow:var(--shadow-glow);">
                     <i class="fas fa-user-shield"></i>
                 </div>
                 <h2>Sonuçlarınızı Görüntüleyin</h2>
@@ -237,7 +241,7 @@
                     <button class="btn btn-primary btn-lg" style="width:100%;" onclick="startPortalQRScan()" id="portalScanBtn">
                         <i class="fas fa-camera"></i> Kamerayı Aç
                     </button>
-                    <div id="portal-qr-reader" style="display:none;margin-top:16px;border-radius:12px;overflow:hidden;border:2px solid var(--neon-blue);"></div>
+                    <div id="portal-qr-reader" style="display:none;margin-top:16px;border-radius:12px;overflow:hidden;border:2px solid var(--text-white);"></div>
                 </div>
 
                 <div id="portalError" style="display:none;margin-top:16px;">
@@ -258,7 +262,7 @@
                 <div class="health-score-ring">
                     <svg viewBox="0 0 160 160">
                         <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="8"/>
-                        <circle id="healthScoreCircle" cx="80" cy="80" r="70" fill="none" stroke="var(--neon-blue)" stroke-width="8"
+                        <circle id="healthScoreCircle" cx="80" cy="80" r="70" fill="none" stroke="var(--text-white)" stroke-width="8"
                             stroke-linecap="round"
                             stroke-dasharray="439.82"
                             stroke-dashoffset="439.82"
@@ -342,7 +346,7 @@
                 p.style.animationDelay = Math.random() * 8 + 's';
                 p.style.width = (1 + Math.random() * 2) + 'px';
                 p.style.height = p.style.width;
-                const colors = ['var(--neon-blue)', 'var(--neon-purple)', 'var(--neon-green)'];
+                const colors = ['var(--text-white)', 'var(--neon-purple)', 'var(--neon-green)'];
                 p.style.background = colors[Math.floor(Math.random() * colors.length)];
                 p.style.boxShadow = `0 0 ${3 + Math.random() * 5}px ${p.style.background}`;
                 c.appendChild(p);
@@ -437,7 +441,7 @@
                 <div style="flex:1;">
                     <h2 style="font-size:20px;font-weight:700;color:var(--text-white);margin-bottom:4px;">${patient.firstName} ${patient.lastName}</h2>
                     <div style="font-size:12px;color:var(--text-secondary);display:flex;flex-wrap:wrap;gap:8px;">
-                        <span><i class="fas fa-id-card" style="color:var(--neon-blue);margin-right:4px;"></i>${patient.id}</span>
+                        <span><i class="fas fa-id-card" style="color:var(--text-white);margin-right:4px;"></i>${patient.id}</span>
                         <span><i class="fas fa-birthday-cake" style="color:var(--neon-purple);margin-right:4px;"></i>${age} yaş</span>
                         <span><i class="fas fa-venus-mars" style="color:var(--neon-green);margin-right:4px;"></i>${patient.gender || '-'}</span>
                         ${patient.bloodType ? `<span><i class="fas fa-tint" style="color:var(--neon-pink);margin-right:4px;"></i>${patient.bloodType}</span>` : ''}
@@ -648,13 +652,13 @@
             if (semen.length > 0) {
                 html += `<div class="test-result-card">
                     <div class="test-result-header">
-                        <div class="test-result-title"><i class="fas fa-vial" style="color:var(--neon-blue);"></i> Semen Analizi</div>
+                        <div class="test-result-title"><i class="fas fa-vial" style="color:var(--text-white);"></i> Semen Analizi</div>
                         <span class="badge badge-info">${semen.length} test</span>
                     </div>
                     <div class="test-result-body">
                         ${semen.map(t => `
                             <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border-subtle);">
-                                <div style="font-size:11px;color:var(--neon-blue);font-family:'JetBrains Mono',mono;margin-bottom:8px;">${fmtDate(t.date)}</div>
+                                <div style="font-size:11px;color:var(--text-white);font-family:'JetBrains Mono',mono;margin-bottom:8px;">${fmtDate(t.date)}</div>
                                 <div class="test-param-row"><span class="test-param-name">Hacim</span><span class="test-param-value" style="color:var(--text-white);">${t.volume || '-'} ml</span></div>
                                 <div class="test-param-row"><span class="test-param-name">Konsantrasyon</span><span class="test-param-value" style="color:var(--text-white);">${t.concentration || '-'} M/ml</span></div>
                                 <div class="test-param-row"><span class="test-param-name">Motilite</span><span class="test-param-value" style="color:var(--text-white);">${t.progressiveMotility || '-'}%</span></div>
@@ -750,7 +754,7 @@
             const container = document.getElementById('portalTimeline');
             const events = [];
 
-            semen.forEach(t => events.push({ date: t.date, text: `Semen Analizi — ${t.result || 'Sonuç bekleniyor'}`, icon: 'fa-vial', color: 'var(--neon-blue)' }));
+            semen.forEach(t => events.push({ date: t.date, text: `Semen Analizi — ${t.result || 'Sonuç bekleniyor'}`, icon: 'fa-vial', color: 'var(--text-white)' }));
             lab.forEach(t => events.push({ date: t.date, text: `${t.testType} — ${t.status}`, icon: 'fa-flask', color: 'var(--neon-green)' }));
             dna.forEach(t => events.push({ date: t.date, text: `${t.testLabel} — ${t.overallResult}`, icon: 'fa-dna', color: 'var(--neon-purple)' }));
             ivf.forEach(t => events.push({ date: t.startDate, text: `IVF ${t.protocol} — ${t.status}`, icon: 'fa-baby', color: 'var(--neon-pink)' }));
