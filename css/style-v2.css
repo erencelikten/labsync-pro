@@ -8,10 +8,10 @@
 :root {
     --bg-deep: #000000;
     --bg-primary: #000000;
-    --bg-secondary: rgba(0, 0, 0, 0.4);
-    --bg-card: rgba(0, 0, 0, 0.15); /* Sleek black glass */
-    --bg-card-hover: rgba(0, 0, 0, 0.3);
-    --bg-glass: rgba(0, 0, 0, 0.2);
+    --bg-secondary: rgba(20, 20, 25, 0.25);
+    --bg-card: rgba(255, 255, 255, 0.03); /* Optically bright authentic glass */
+    --bg-card-hover: rgba(255, 255, 255, 0.08);
+    --bg-glass: rgba(255, 255, 255, 0.02);
     --bg-input: rgba(0, 0, 0, 0.4);
     --border-glass: rgba(0, 212, 255, 0.12);
     --border-glow: rgba(0, 212, 255, 0.3);
@@ -108,8 +108,8 @@ body::after {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.6; /* Let the video clearly show without dimming it too much into black */
-    filter: saturate(1.2) contrast(1.1);
+    opacity: 1.0; /* Full brightness, let the video be the dominant light source */
+    filter: saturate(1.1) brightness(0.85); /* Slightly naturally dimmed, but full color */
     will-change: transform;
 }
 
@@ -452,14 +452,14 @@ body::after {
 /* ─── Cards ─── */
 .card {
     background: var(--bg-card);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: all var(--transition-med);
     position: relative;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 .card::before {
     content: '';
@@ -500,9 +500,9 @@ body::after {
 }
 .stat-card {
     background: var(--bg-card);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-lg);
     padding: 20px;
     display: flex;
@@ -510,7 +510,7 @@ body::after {
     gap: 16px;
     transition: all var(--transition-med);
     position: relative;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
     overflow: hidden;
 }
 .stat-card::after {
