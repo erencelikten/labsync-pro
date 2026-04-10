@@ -9,10 +9,10 @@
     --bg-deep: #000000;
     --bg-primary: #000000;
     --bg-secondary: rgba(255, 255, 255, 0.02);
-    --bg-card: rgba(255, 255, 255, 0.04); /* True frosted glass light-catcher */
-    --bg-card-hover: rgba(255, 255, 255, 0.08);
-    --bg-glass: rgba(255, 255, 255, 0.03);
-    --bg-input: rgba(255, 255, 255, 0.06);
+    --bg-card: rgba(255, 255, 255, 0.015); /* Maximum transparency */
+    --bg-card-hover: rgba(255, 255, 255, 0.04);
+    --bg-glass: rgba(255, 255, 255, 0.01);
+    --bg-input: rgba(255, 255, 255, 0.02);
     --border-glass: rgba(255, 255, 255, 0.1);
     --border-glow: rgba(255, 255, 255, 0.2);
     --border-subtle: rgba(255, 255, 255, 0.06);
@@ -44,7 +44,7 @@
     --radius-lg: 16px;
     --radius-xl: 20px;
     --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.15);
-    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    --shadow-card: inset 1px 1px 1px rgba(255,255,255,0.25), inset -1px -1px 2px rgba(0,0,0,0.6), 0 8px 32px rgba(0, 0, 0, 0.4);
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-med: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -463,14 +463,14 @@ body::after {
 /* ─── Cards ─── */
 .card {
     background: var(--bg-card);
-    backdrop-filter: blur(12px) brightness(1.15); /* Boosts ambient video light through the glass */
-    -webkit-backdrop-filter: blur(12px) brightness(1.15);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(4px) brightness(1.15); /* Maximized transparency */
+    -webkit-backdrop-filter: blur(4px) brightness(1.15);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: all var(--transition-med);
     position: relative;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-card); /* Apply requested 3D Apple glass bevel */
 }
 .card::before {
     content: '';
@@ -511,9 +511,9 @@ body::after {
 }
 .stat-card {
     background: var(--bg-card);
-    backdrop-filter: blur(12px) brightness(1.15);
-    -webkit-backdrop-filter: blur(12px) brightness(1.15);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(4px) brightness(1.15);
+    -webkit-backdrop-filter: blur(4px) brightness(1.15);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-lg);
     padding: 20px;
     display: flex;
@@ -521,7 +521,7 @@ body::after {
     gap: 16px;
     transition: all var(--transition-med);
     position: relative;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-card); /* Requested 3D Apple glass */
     overflow: hidden;
 }
 .stat-card::after {
@@ -714,7 +714,7 @@ body::after {
     overflow: hidden;
 }
 .btn-primary {
-    background: linear-gradient(135deg, var(--neon-blue), #0099cc);
+    background: linear-gradient(135deg, var(--neon-blue), #666666);
     color: #fff;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
 }
@@ -1689,7 +1689,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--neon-blue), #0088cc);
+    background: linear-gradient(135deg, var(--neon-blue), #666666);
     align-items: center;
     justify-content: center;
     font-size: 22px;
@@ -1726,7 +1726,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--neon-blue), #0088cc);
+    background: linear-gradient(135deg, var(--neon-blue), #666666);
     display: flex;
     align-items: center;
     justify-content: center;
