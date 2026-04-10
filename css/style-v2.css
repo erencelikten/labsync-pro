@@ -90,11 +90,14 @@ body::after {
 /* ─── Cinematic Video Background ─── */
 .video-bg-container {
     position: fixed;
-    inset: 0;
+    top: -100px;
+    bottom: -100px;
+    left: -50px;
+    right: -50px;
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    background: #000000; /* Pure black, absolutely no blue tint */
+    background: #000000;
 }
 
 .video-bg {
@@ -102,8 +105,8 @@ body::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     opacity: 0.6; /* Let the video clearly show without dimming it too much into black */
     filter: saturate(1.2) contrast(1.1);
@@ -1343,29 +1346,40 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     .main-content { margin-left: 0; }
     .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
-    /* ─── Top Header: Compact Mobile ─── */
+    /* ─── Cinematic Mobile HUD Navbar ─── */
     .top-header {
         height: auto;
-        min-height: calc(56px + env(safe-area-inset-top));
-        padding: env(safe-area-inset-top) 16px 0 16px;
-        background: rgba(0, 0, 0, 0.4); /* Much more transparent pure black */
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+        min-height: calc(70px + env(safe-area-inset-top));
+        padding: env(safe-area-inset-top) 20px 16px 20px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: none;
     }
     .header-title {
-        font-size: 15px;
-        letter-spacing: 0.5px;
+        font-size: 18px;
+        letter-spacing: 1px;
+        text-shadow: 0 0 16px rgba(0, 212, 255, 0.4);
     }
     .header-breadcrumb { display: none; }
     .header-search { display: none; }
     .header-date { display: none; }
-    .header-right { gap: 8px; }
-    .header-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 13px;
-        border-radius: 10px;
+    .header-right { gap: 12px; }
+    
+    /* Elegant Circular Glass Buttons */
+    .header-btn, .mobile-menu-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .mobile-menu-btn i, .header-btn i {
+        color: var(--text-white);
     }
 
     /* ─── Page Content: Adjusted for mobile spacing ─── */
