@@ -6,13 +6,13 @@
 
 /* ─── CSS Variables ─── */
 :root {
-    --bg-deep: #060a14;
-    --bg-primary: #0a0e1a;
-    --bg-secondary: #0f1628;
-    --bg-card: rgba(15, 22, 40, 0.15); /* More transparent to allow background blur to shine */
-    --bg-card-hover: rgba(20, 30, 55, 0.35);
-    --bg-glass: rgba(10, 14, 26, 0.2);
-    --bg-input: rgba(15, 22, 40, 0.35);
+    --bg-deep: #000000;
+    --bg-primary: #000000;
+    --bg-secondary: rgba(0, 0, 0, 0.4);
+    --bg-card: rgba(0, 0, 0, 0.15); /* Sleek black glass */
+    --bg-card-hover: rgba(0, 0, 0, 0.3);
+    --bg-glass: rgba(0, 0, 0, 0.2);
+    --bg-input: rgba(0, 0, 0, 0.4);
     --border-glass: rgba(0, 212, 255, 0.12);
     --border-glow: rgba(0, 212, 255, 0.3);
     --border-subtle: rgba(255, 255, 255, 0.06);
@@ -155,9 +155,9 @@ body::after {
 .sidebar {
     width: var(--sidebar-width);
     height: 100dvh;
-    background: rgba(8, 12, 24, 0.20);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: rgba(0, 0, 0, 0.3); /* Pure black glassmorphism */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border-right: 1px solid var(--border-glass);
     display: flex;
     flex-direction: column;
@@ -324,9 +324,9 @@ body::after {
 .top-header {
     height: calc(var(--header-height) + env(safe-area-inset-top));
     padding-top: env(safe-area-inset-top);
-    background: rgba(8, 12, 24, 0.20);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: rgba(0, 0, 0, 0.3); /* Pure black glassmorphism */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--border-glass);
     display: flex;
     align-items: center;
@@ -1348,9 +1348,9 @@ textarea.form-control { resize: vertical; min-height: 60px; }
         height: auto;
         min-height: calc(56px + env(safe-area-inset-top));
         padding: env(safe-area-inset-top) 16px 0 16px;
-        background: rgba(6, 10, 20, 0.85);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
+        background: rgba(0, 0, 0, 0.4); /* Much more transparent pure black */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid rgba(0, 212, 255, 0.08);
     }
     .header-title {
