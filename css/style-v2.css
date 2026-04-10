@@ -9,29 +9,29 @@
     --bg-deep: #000000;
     --bg-primary: #000000;
     --bg-secondary: rgba(0, 0, 0, 0.3);
-    --bg-card: rgba(0, 0, 0, 0.3);
-    --bg-card-hover: rgba(0, 0, 0, 0.45);
-    --bg-glass: rgba(0, 0, 0, 0.2);
-    --bg-input: rgba(0, 0, 0, 0.4);
-    --border-glass: rgba(0, 212, 255, 0.12);
-    --border-glow: rgba(0, 212, 255, 0.3);
+    --bg-card: rgba(255, 255, 255, 0.04);
+    --bg-card-hover: rgba(255, 255, 255, 0.08);
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --bg-input: rgba(255, 255, 255, 0.05);
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(255, 255, 255, 0.2);
     --border-subtle: rgba(255, 255, 255, 0.06);
-    --neon-blue: #00d4ff;
-    --neon-cyan: #00e5ff;
+    --neon-blue: #ffffff; /* Blue completely stripped and replaced with white */
+    --neon-cyan: #dddddd;
     --neon-green: #00ff88;
-    --neon-purple: #a855f7;
-    --neon-pink: #ff3366;
+    --neon-purple: #bbbbbb;
+    --neon-pink: #dddddd;
     --neon-orange: #ff8800;
     --neon-yellow: #ffd600;
-    --accent: #00d4ff;
-    --accent-dim: rgba(0, 212, 255, 0.15);
+    --accent: #ffffff;
+    --accent-dim: rgba(255, 255, 255, 0.1);
     --success: #00ff88;
     --success-dim: rgba(0, 255, 136, 0.12);
     --warning: #ff8800;
     --warning-dim: rgba(255, 136, 0, 0.12);
     --danger: #ff3366;
     --danger-dim: rgba(255, 51, 102, 0.12);
-    --info: #6366f1;
+    --info: #888888;
     --text-white: #e8ecf4;
     --text-primary: #c8d0e0;
     --text-secondary: #7a8ba8;
@@ -43,8 +43,8 @@
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 20px;
-    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.15);
-    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+    --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.15);
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-med: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -119,8 +119,8 @@ body::after {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.8;
-    filter: brightness(0.9);
+    opacity: 0.9;
+    filter: grayscale(1) brightness(0.6); /* Force Pinterest video to monochrome so it doesn't leak blue */
     will-change: transform;
 }
 
@@ -463,8 +463,8 @@ body::after {
 /* ─── Cards ─── */
 .card {
     background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px); /* Lower blur so video actually shows through! */
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -511,8 +511,8 @@ body::after {
 }
 .stat-card {
     background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-lg);
     padding: 20px;
@@ -1366,7 +1366,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
         height: auto;
         min-height: calc(70px + env(safe-area-inset-top));
         padding: env(safe-area-inset-top) 20px 16px 20px;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+        background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
         border-bottom: none;
@@ -1374,7 +1374,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
     .header-title {
         font-size: 18px;
         letter-spacing: 1px;
-        text-shadow: 0 0 16px rgba(0, 212, 255, 0.4);
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
     }
     .header-breadcrumb { display: none; }
     .header-search { display: none; }
