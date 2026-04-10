@@ -8,11 +8,11 @@
 :root {
     --bg-deep: #000000;
     --bg-primary: #000000;
-    --bg-secondary: rgba(255, 255, 255, 0.02);
-    --bg-card: rgba(255, 255, 255, 0.015); /* Maximum transparency */
-    --bg-card-hover: rgba(255, 255, 255, 0.04);
-    --bg-glass: rgba(255, 255, 255, 0.01);
-    --bg-input: rgba(255, 255, 255, 0.02);
+    --bg-secondary: rgba(255, 255, 255, 0.1);
+    --bg-card: rgba(255, 255, 255, 0.2);
+    --bg-card-hover: rgba(255, 255, 255, 0.25);
+    --bg-glass: rgba(255, 255, 255, 0.15);
+    --bg-input: rgba(255, 255, 255, 0.15);
     --border-glass: rgba(255, 255, 255, 0.1);
     --border-glow: rgba(255, 255, 255, 0.2);
     --border-subtle: rgba(255, 255, 255, 0.06);
@@ -463,8 +463,8 @@ body::after {
 /* ─── Cards ─── */
 .card {
     background: var(--bg-card);
-    backdrop-filter: blur(4px) brightness(1.15); /* Maximized transparency */
-    -webkit-backdrop-filter: blur(4px) brightness(1.15);
+    backdrop-filter: blur(20px) brightness(1.15);
+    -webkit-backdrop-filter: blur(20px) brightness(1.15);
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -511,8 +511,8 @@ body::after {
 }
 .stat-card {
     background: var(--bg-card);
-    backdrop-filter: blur(4px) brightness(1.15);
-    -webkit-backdrop-filter: blur(4px) brightness(1.15);
+    backdrop-filter: blur(20px) brightness(1.15);
+    -webkit-backdrop-filter: blur(20px) brightness(1.15);
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-lg);
     padding: 20px;
