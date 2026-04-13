@@ -111,7 +111,8 @@ body::after {
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    background: #000000;
+    background: #060a14 url('../assets/app-bg.png') no-repeat center center;
+    background-size: cover;
 }
 
 .video-bg {
