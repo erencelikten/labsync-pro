@@ -159,26 +159,43 @@ function stopQRScanner() {
 function onQRScanned(decodedText) {
     stopQRScanner();
 
+    let patientId = null;
+
+    // First try: Extract from URL format (Patient Portal Link)
     try {
-        const data = JSON.parse(decodedText);
-        if (data.type === 'labsync_patient' && data.id) {
-            const patient = getPatient(data.id);
-            if (patient) {
-                document.getElementById('qrScanResult').style.display = 'block';
-                document.getElementById('qrResultText').textContent =
-                    `Hasta bulundu: ${patient.firstName} ${patient.lastName} (${patient.id})`;
-
-                showToast(`${patient.firstName} ${patient.lastName} tanındı`, 'success');
-
-                // Show patient detail after a brief delay
-                setTimeout(() => showPatientDetail(data.id), 800);
-            } else {
-                showToast('Bu QR koda ait hasta bulunamadı', 'warning');
-            }
-        } else {
-            showToast('Geçersiz QR kod formatı', 'error');
+        const url = new URL(decodedText);
+        if (url.hash && url.hash.includes('patient=')) {
+            patientId = decodeURIComponent(url.hash.split('patient=')[1].split('&')[0]);
         }
-    } catch (e) {
-        showToast('QR kod okunamadı: ' + decodedText.substring(0, 50), 'error');
+    } catch (_) {
+        // Not a URL, continue
+    }
+
+    // Second try: Legacy JSON format
+    if (!patientId) {
+        try {
+            const data = JSON.parse(decodedText);
+            if (data.type === 'labsync_patient' && data.id) {
+                patientId = data.id;
+            }
+        } catch (_) {}
+    }
+
+    if (patientId) {
+        const patient = getPatient(patientId);
+        if (patient) {
+            document.getElementById('qrScanResult').style.display = 'block';
+            document.getElementById('qrResultText').textContent =
+                `Hasta bulundu: ${patient.firstName} ${patient.lastName} (${patient.id})`;
+
+            showToast(`${patient.firstName} ${patient.lastName} tanındı`, 'success');
+
+            // Show patient detail after a brief delay
+            setTimeout(() => showPatientDetail(patientId), 800);
+        } else {
+            showToast('Sistemde hasta bulunamadı: ' + patientId, 'warning');
+        }
+    } else {
+        showToast('Geçersiz QR: Hasta verisi çözümlenemedi.', 'error');
     }
 }

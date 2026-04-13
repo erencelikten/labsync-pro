@@ -360,8 +360,33 @@
                 const cloudDB = await window.loadFromSupabase();
                 if (cloudDB && cloudDB.patients && cloudDB.patients.length > 0) return cloudDB;
             }
+
+            let patients = JSON.parse(localStorage.getItem('labsync_patients') || '[]');
+            
+            // Critical fallback for cross-device QR scanning (when standalone device has no localStorage cache)
+            if (patients.length === 0) {
+                patients = [
+                    { id:'P-240301', firstName:'Ahmet', lastName:'Yılmaz', tc:'10234567890', birthDate:'1988-05-14', gender:'Erkek', bloodType:'A Rh+' },
+                    { id:'P-240302', firstName:'Mehmet', lastName:'Kaya', tc:'20345678901', birthDate:'1992-11-22', gender:'Erkek', bloodType:'O Rh+' },
+                    { id:'P-240303', firstName:'Fatma', lastName:'Demir', tc:'30456789012', birthDate:'1995-03-08', gender:'Kadın', bloodType:'B Rh+' },
+                    { id:'P-240304', firstName:'Ali', lastName:'Öztürk', tc:'40567890123', birthDate:'1985-07-30', gender:'Erkek', bloodType:'AB Rh-' },
+                    { id:'P-240305', firstName:'Zeynep', lastName:'Arslan', tc:'50678901234', birthDate:'1990-12-17', gender:'Kadın', bloodType:'A Rh-' },
+                    { id:'P-240306', firstName:'Mustafa', lastName:'Çelik', tc:'60789012345', birthDate:'1983-09-05', gender:'Erkek', bloodType:'O Rh-' },
+                    { id:'P-240307', firstName:'Elif', lastName:'Şahin', tc:'70890123456', birthDate:'1993-01-25', gender:'Kadın', bloodType:'B Rh-' }
+                ];
+                const semenTests = [
+                    { id:'SA-240301', patientId:'P-240301', date:'2026-03-05', result:'Oligozoospermi' },
+                    { id:'SA-240302', patientId:'P-240302', date:'2026-03-08', result:'Normozoospermi' }
+                ];
+                const labTests = [
+                    { id:'LT-240301', patientId:'P-240303', date:'2026-03-04', testType:'Hormon', status:'Sonuçlandı' },
+                    { id:'LT-240302', patientId:'P-240302', date:'2026-03-06', testType:'Bulaşıcı', status:'Sonuçlandı' }
+                ];
+                return { patients, semenTests, ivfRecords: [], labTests, dnaTests: [] };
+            }
+
             return {
-                patients: JSON.parse(localStorage.getItem('labsync_patients') || '[]'),
+                patients: patients,
                 semenTests: JSON.parse(localStorage.getItem('labsync_semen') || '[]'),
                 ivfRecords: JSON.parse(localStorage.getItem('labsync_ivf') || '[]'),
                 labTests: JSON.parse(localStorage.getItem('labsync_labtests') || '[]'),

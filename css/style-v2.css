@@ -109,7 +109,7 @@ body::after {
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    background: #000000;
+    background: radial-gradient(circle at 50% 30%, #0d1627 0%, #060a14 60%, #000000 100%);
 }
 
 .video-bg {
@@ -1368,9 +1368,8 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
     /* ─── Cinematic Mobile HUD Navbar ─── */
     .top-header {
-        height: auto;
-        min-height: calc(70px + env(safe-area-inset-top));
-        padding: env(safe-area-inset-top) 20px 16px 20px;
+        height: calc(64px + env(safe-area-inset-top));
+        padding: env(safe-area-inset-top) 20px 0 20px;
         background: rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
@@ -1406,7 +1405,7 @@ textarea.form-control { resize: vertical; min-height: 60px; }
 
     /* ─── Page Content: Adjusted for mobile spacing ─── */
     .page-content {
-        padding: calc(70px + env(safe-area-inset-top) + 16px) 14px calc(16px + env(safe-area-inset-bottom)) 14px; 
+        padding: calc(64px + env(safe-area-inset-top) + 16px) 14px calc(16px + env(safe-area-inset-bottom)) 14px; 
     }
 
     /* ─── Stats Row: Horizontal Scroll Carousel ─── */
