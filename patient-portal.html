@@ -13,8 +13,17 @@
     <link rel="stylesheet" href="css/style-v2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { overflow: auto; height: auto; position: relative !important; overscroll-behavior: auto; padding-bottom: 40px; }
-        body::before, body::after { position: fixed; }
+        /* Override specifically for Portal wrapper layout */
+        body { position: fixed !important; top: 0; bottom: 0; left: 0; right: 0; overflow: hidden !important; }
+        .portal-scroll-wrapper {
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1;
+            padding-bottom: 40px;
+            -webkit-overflow-scrolling: touch;
+        }
 
         /* Portal-specific */
         .portal-hero { 
@@ -200,7 +209,9 @@
             <source src="assets/bg-video-mobile.mp4" type="video/mp4">
         </video>
     </div>
-    <div class="portal-wrapper">
+
+    <!-- Wrapper protects background video from Safari scrolling bugs -->
+    <div class="portal-scroll-wrapper">
         <!-- Hero -->
         <div class="portal-hero">
             <img src="assets/biyosera_logo_hz.png" alt="Biyosera">
@@ -332,6 +343,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/seed-data.js"></script>
+    </div> <!-- End portal-scroll-wrapper -->
+
     <script>
         // ═══ Particles ═══
         function initParticles() {
