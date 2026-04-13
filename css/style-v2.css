@@ -103,10 +103,11 @@ body::after {
 /* ─── Cinematic Video Background ─── */
 .video-bg-container {
     position: fixed;
-    top: -100px;
-    bottom: -100px;
-    left: -50px;
-    right: -50px;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 110vh;
+    transform: translate(-50%, -50%);
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
@@ -117,12 +118,12 @@ body::after {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: translate(-50%, -50%) scale(1.4); /* Guaranteed zoom to crop thick black bars */
     opacity: 0.9;
-    filter: grayscale(1) brightness(0.6); /* Force Pinterest video to monochrome so it doesn't leak blue */
+    filter: grayscale(1) brightness(0.6); /* Force monochrome so it doesn't leak blue */
     will-change: transform;
 }
 
