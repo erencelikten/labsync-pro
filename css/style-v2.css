@@ -68,15 +68,14 @@ html, body {
 }
 
 body {
-    position: relative;
-    height: 100%;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
     margin: 0;
     padding: 0;
     font-family: var(--font-sans);
     background: var(--bg-deep);
     color: var(--text-primary);
     overflow: hidden;
-    width: 100vw;
     line-height: 1.5;
     overscroll-behavior: none;
     padding-left: env(safe-area-inset-left);
@@ -102,7 +101,7 @@ body::after {
 
 /* ─── Cinematic Video Background ─── */
 .video-bg-container {
-    position: absolute;
+    position: fixed;
     top: -100px;
     bottom: -100px;
     left: -50px;
@@ -325,7 +324,7 @@ body::after {
 
 /* ─── Main Content ─── */
 .main-content {
-    flex: 1;
+    width: calc(100% - var(--sidebar-width));
     margin-left: var(--sidebar-width);
     display: flex;
     flex-direction: column;
@@ -1361,7 +1360,10 @@ textarea.form-control { resize: vertical; min-height: 60px; }
         border-left: 1px solid var(--border-glass);
     }
     .sidebar.open { transform: translateX(0); }
-    .main-content { margin-left: 0; }
+    .main-content { 
+        margin-left: 0; 
+        width: 100%;
+    }
     .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
 
     /* ─── Cinematic Mobile HUD Navbar ─── */
